@@ -1,0 +1,26 @@
+{
+  "name": "goalify-backend",
+  "version": "1.0.0",
+  "description": "Goalify Backend API",
+  "main": "index.js",
+  "repository": "https://git.linusboehm.de/sebis2019/goalify-backend.git",
+  "author": "Linus Boehm <letters@linusboehm.de>",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./index.js",
+    "dev": "nodemon ./index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "helmet": "^3.18.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.11"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
