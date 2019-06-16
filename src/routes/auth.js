@@ -3,9 +3,8 @@
 const express        = require('express');
 const router         = express.Router();
 
-const middlewares    = require('../middlewares');
 const AuthController = require('../controllers/auth');
-const {check} = require('express-validator/check');
+const {check, oneOf} = require('express-validator/check');
 
 let registerValidators = [
     check('password').isLength({ min:8 }).withMessage('Min. 8 chars')
@@ -19,7 +18,8 @@ let registerValidators = [
             return value;
         }
     }),
-    check("email").isEmail().withMessage('Email seems not to be valid')
+    check("email").isEmail().withMessage('Email seems not to be valid'),
+    oneOf([check("organization_id").exists(), check("organization_name").exists()])
 ];
 let loginValidators = [
     check('password').isLength({ min:8 }).withMessage('Min. 8 chars'),
@@ -27,7 +27,6 @@ let loginValidators = [
 ];
 router.post('/login',loginValidators, AuthController.login);
 router.post('/register',registerValidators, AuthController.register);
-router.get('/me' , AuthController.me);
 router.get('/logout', AuthController.logout);
 
 

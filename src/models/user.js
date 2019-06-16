@@ -27,6 +27,11 @@ const UserSchema  = new mongoose.Schema({
         required: true,
 
     },
+    role: {
+        type: String,
+        default: "employee",
+
+    },
     organization_id: {
         type: String,
         required: true,

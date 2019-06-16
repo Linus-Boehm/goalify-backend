@@ -1,6 +1,7 @@
 "use strict";
 
 const config = require ('./config');
+const jwt = require("jsonwebtoken");
 
 const allowCrossDomain = (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -24,9 +25,26 @@ const errorHandler = (err, req, res, next) => {
     res.render('error', { error: err })
 };
 
+const isAuthenticated = (req, res, next) => {
+    const header =  req.headers['authorization'];
+
+    if (header) {
+        // Remove Bearer from string
+        let token = header.split(' ')[1]
+        try {
+            let result = jwt.verify(token, config.JwtSecret)
+            req.access_token = result
+            return next()
+
+        }catch (e) {
+            console.error(e)
+        }
+    }
+    res.status(403).send("Authentication error")
+}
 
 module.exports = {
     allowCrossDomain,
-    //checkAuthentication,
+    isAuthenticated,
     errorHandler
 };
