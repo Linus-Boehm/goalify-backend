@@ -30,7 +30,7 @@ api.get('/', (req, res) => {
 // API routes
 api.use('/auth'  , auth);
 api.use('/user', user);
-api.use('/team', team);
+api.use('/teams', team);
 
 
 

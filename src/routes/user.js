@@ -11,7 +11,7 @@ const {check, oneOf} = require('express-validator/check');
 
 router.get('/me' , isAuthenticated, UserController.me);
 router.get('/me/organization', isAuthenticated, UserController.organization);
-
+//router.get('/:id')
 
 
 /*
