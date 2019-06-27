@@ -2,14 +2,16 @@
   "name": "goalify-backend",
   "version": "1.0.0",
   "description": "Goalify Backend API",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": "https://git.linusboehm.de/sebis2019/goalify-backend.git",
   "author": "Linus Boehm <letters@linusboehm.de>",
   "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./index.js",
-    "dev": "nodemon ./index.js"
+    "start": "echo \"TODO: build with babel\" && exit 1",
+    "dev": "nodemon --exec babel-node src/index.js",
+    "babel": "babel-node src/index.js",
+    "seed": "babel-node spec/seed_database.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -21,9 +23,15 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "mongoose": "^5.5.11",
+    "morgan": "^1.9.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "factory-girl": "^5.0.4",
     "nodemon": "^1.19.1"
   }
 }

@@ -1,15 +1,9 @@
 "use strict";
 
+require('dotenv').config()
 
+export const port = process.env.API_PORT;
+export const mongoURI = process.env.MONGODB_URI;
+export const JwtSecret = process.env.JWT_SECRET;
 
-//Configuration variables
-
-const port      = process.env.API_PORT;
-const mongoURI  = process.env.MONGODB_URI;
-const JwtSecret = process.env.JWT_SECRET;
-console.log(mongoURI)
-module.exports = {
-    port,
-    mongoURI,
-    JwtSecret,
-};
+console.log(mongoURI);

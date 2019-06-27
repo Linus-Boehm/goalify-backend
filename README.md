@@ -11,7 +11,7 @@ A Backend REST-API for the Goalify App
 **Optional:**
 * [Robo 3T](https://robomongo.org/) as a GUI for MongoDB
 
-##Setup
+## Setup
 
 * Clone this Repository
 * cd into the project root
@@ -24,7 +24,9 @@ cd path/to/workspace/goalify-backend
 * Create an empty Database named `goalifydb` (use Robo 3T or your command line)
 * Start development environment with `yarn dev`
 * Visit http://localhost:3000/
-                       
-                       
+
+## Seed database
+* Use yarn seed to seed the database
+* Modify /spec/seed_database.js and /spec/factories/* if needed
 
  
