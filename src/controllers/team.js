@@ -5,28 +5,42 @@ const TeamModel = require('../models/team');
 
 const list = async (req, res) => {
     try {
-        let teams = await TeamModel.find({organization_id: req.access_token.organization_id})
+        let teams = await TeamModel.find({organization_id: req.access_token.organization_id}).exec();
         if (!teams) return res.status(404).json({
-            message: `User not found`
+            message: `Teams not found`
         });
         res.status(200).json(teams)
     } catch (e) {
         console.error(e)
         res.status(500).json({
             error: 'Internal Server Error',
-            message: error.message
+            message: e.message
         })
     }
 
 }
 
 const show = async (req, res) => {
-
+    try {
+        let team = await TeamModel.findById(req.params.id).exec()
+        if (!team) return res.status(404).json({
+            message: `Team not found`
+        });
+        res.status(200).json(team)
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({
+            error: 'Internal Server Error',
+            message: e.message
+        })
+    }
 }
 
 const create = async (req, res) => {
     try {
-        let team = await TeamModel.create({...req.body, organization_id: req.access_token.organization_id})
+        console.log(req.body)
+        let team = await TeamModel.create({...req.body, organization_id: req.access_token.organization_id}).exec()
+        console.log(team)
         res.status(200).json(team)
     }catch (e) {
         console.error(e)
@@ -38,7 +52,18 @@ const create = async (req, res) => {
 
 }
 const update = async (req, res) => {
-
+    try {
+        console.log(req.body)
+        let team = await TeamModel.updateOne({_id: req.params.id},{...req.body, organization_id: req.access_token.organization_id, _id: req.params.id}).exec()
+        console.log(team)
+        res.status(200).json(team)
+    }catch (e) {
+        console.error(e)
+        res.status(500).json({
+            error: 'Internal Server Error',
+            message: error.message
+        })
+    }
 }
 
 const remove = async (req, res) => {
