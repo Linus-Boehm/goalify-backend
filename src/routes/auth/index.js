@@ -1,6 +1,8 @@
 "use strict";
 
 import { Router } from 'express';
+import {wrap} from 'async-middleware';
+
 import { check, oneOf } from 'express-validator/check';
 
 import * as controller from '../../controllers/auth';
@@ -34,9 +36,9 @@ const loginValidators = [
 
 const router = Router();
 
-router.get('/logout', controller.logout);
+router.get('/logout', wrap(controller.logout));
 
-router.post('/login', loginValidators, controller.login);
-router.post('/register', registerValidators, controller.register);
+router.post('/login', loginValidators, wrap(controller.login));
+router.post('/register', registerValidators, wrap(controller.register));
 
 export default router

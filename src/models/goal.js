@@ -15,7 +15,7 @@ const GoalSchema = new Schema({
   assignee: { type: String, ref: 'User' },
   reviewer: { type: String, ref: 'User' },
 
-  related_to: { type: String, refPath: 'relatedModel'},
+  related_to: { type: String, refPath: 'related_model'},
   related_model: { type: String }
 
 });
