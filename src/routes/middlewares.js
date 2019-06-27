@@ -46,6 +46,7 @@ export function isAuthenticated(req, res, next) {
 export function applyBasicMiddlewares(app) {
   app.use(logger('combined'));
   app.use(helmet());
+  app.use(errorHandler())
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(allowCrossDomain)

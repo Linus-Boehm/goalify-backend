@@ -1,7 +1,7 @@
 "use strict";
 
 
-const TeamModel = require('../models/team');
+import TeamModel from '../models/team';
 
 export async function list(req, res) {
     try {
