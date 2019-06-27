@@ -3,6 +3,7 @@
 import express from 'express';
 import * as http from 'http';
 
+import * as middlewares from './routes/middlewares'
 import mongoose from 'mongoose';
 import * as config from './config';
 import routes from './routes'
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
   });
 });
 app.use('/', routes);
+app.use(middlewares.errorHandler)
 
 //Create a http server based on Express
 const server = http.createServer(app);
