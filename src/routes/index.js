@@ -11,7 +11,7 @@ const router = Router();
 
 // API routes
 router.use('/auth', authRouter);
-router.use('/user', userRouter);
+router.use('/users', userRouter);
 router.use('/teams', teamRouter);
 router.use('/goals', goalRouter);
 
