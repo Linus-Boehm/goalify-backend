@@ -22,8 +22,12 @@ export function errorHandler(err, req, res, next) {
   if (res.headersSent) {
     return next(err)
   }
-  res.status(500);
-  res.render('error', { error: err })
+
+  console.log(err);
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: err.message
+  })
 }
 
 export function isAuthenticated(req, res, next) {

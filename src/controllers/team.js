@@ -17,17 +17,8 @@ export async function show(req, res) {
 }
 
 export async function create(req, res) {
-  try {
     let team = await TeamModel.create({ ...req.body, organization_id: req.access_token.organization_id })
     res.status(200).json(team)
-  } catch (e) {
-    console.error(e)
-    res.status(500).json({
-      error: 'Internal Server Error',
-      message: error.message
-    })
-  }
-
 }
 
 export async function update(req, res) {
