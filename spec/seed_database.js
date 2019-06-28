@@ -90,14 +90,14 @@ async function seedDatabase() {
     title: 'Team Goal',
     created_by: johanna._id,
     related_to: marketingTeam._id,
-    related_to_model: 'Team'
+    related_model: 'Team'
   });
 
   const organizationGoal = await factory.create('goal', {
     title: 'Organization Goal',
     created_by: hubert._id,
     related_to: organizaton._id,
-    related_to_model: 'Organization'
+    related_model: 'Organization'
   });
 
   // </Goals>

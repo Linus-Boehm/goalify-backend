@@ -1,6 +1,7 @@
 "use strict";
 
 import { Router } from 'express';
+import { wrap } from 'async-middleware';
 
 import { isAuthenticated } from '../middlewares';
 import * as controller from '../../controllers/team';
@@ -11,14 +12,14 @@ const router = Router();
 router.use(isAuthenticated)
 
 
-router.get('/', controller.list);
-router.get('/:id', controller.show);
+router.get('/', wrap(controller.list));
+router.get('/:id', wrap(controller.show));
 
-router.post('/', controller.create);
+router.post('/', wrap(controller.create));
 
-router.put('/:id', controller.update);
+router.put('/:id', wrap(controller.update));
 
-router.delete('/:id', controller.remove);
+router.delete('/:id', wrap(controller.remove));
 
 
 router.use("/:id/member", memberRouter);

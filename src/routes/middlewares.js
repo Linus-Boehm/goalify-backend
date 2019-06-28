@@ -19,9 +19,6 @@ export function allowCrossDomain(req, res, next) {
 }
 
 export function errorHandler(err, req, res, next) {
-  if (res.headersSent) {
-    return next(err)
-  }
 
   console.log(err);
   res.status(500).json({
@@ -36,12 +33,9 @@ export function isAuthenticated(req, res, next) {
   if (header) {
     // Remove Bearer from string
     let token = header.split(' ')[ 1 ]
-    try {
-      req.access_token = jwt.verify(token, JwtSecret);
-      return next()
-    } catch (e) {
-      console.error(e)
-    }
+    req.access_token = jwt.verify(token, JwtSecret);
+
+    return next()
   }
   res.status(403).send("Authentication error")
 }
