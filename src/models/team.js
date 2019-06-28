@@ -2,7 +2,7 @@
 import { Schema, model } from 'mongoose';
 import uuid from 'uuid'
 
-const TeamMemberSchema = new Schema({
+const TeamRoleSchema = new Schema({
   user_id: {
     type: String,
     required: true,
@@ -26,7 +26,7 @@ const TeamSchema = new Schema({
     required: true,
 
   },
-  team_roles: [ TeamMemberSchema ]
+  team_roles: [ TeamRoleSchema ]
 
 });
 

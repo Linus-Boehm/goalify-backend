@@ -21,7 +21,7 @@ export async function me(req, res) {
     message: `User not found`
   });
   let copy = { ...user._doc }
-  delete copy.password_hash
+  delete copy.password
   res.status(200).json(copy)
 
 };
