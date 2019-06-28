@@ -76,28 +76,32 @@ async function seedDatabase() {
     title: 'Private Goal',
     is_private: true,
     created_by: peter._id,
-    assignee: peter._id
+    assignee: peter._id,
+    organization_id: organizaton._id
   });
 
   // TODO add to OA
   const objectiveAgreementGoal = await factory.create('goal', {
     title: 'Objective agreement Goal',
     created_by: peter._id,
-    assignee: peter._id
+    assignee: peter._id,
+    organization_id: organizaton._id
   });
 
   const teamGoal = await factory.create('goal', {
     title: 'Team Goal',
     created_by: johanna._id,
     related_to: marketingTeam._id,
-    related_model: 'Team'
+    related_model: 'Team',
+    organization_id: organizaton._id
   });
 
   const organizationGoal = await factory.create('goal', {
     title: 'Organization Goal',
     created_by: hubert._id,
     related_to: organizaton._id,
-    related_model: 'Organization'
+    related_model: 'Organization',
+    organization_id: organizaton._id
   });
 
   // </Goals>
