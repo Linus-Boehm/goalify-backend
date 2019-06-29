@@ -12,10 +12,20 @@ export async function list(req, res) {
 }
 
 export async function show(req, res) {
+  const organizationId = req.access_token.organization_id;
+
   let team = await TeamModel.findById(req.params.id).exec()
-  if (!team) return res.status(404).json({
-    message: `Team not found`
-  });
+  if (!team)
+    return res.status(404).json({
+      message: `Team not found`
+    });
+
+  if (team.organization_id !== organizationId)
+    return res.status(403).json({
+      message: `Unauthorized - Team is not in user's organization`
+    })
+
+
   res.status(200).json(team)
 }
 

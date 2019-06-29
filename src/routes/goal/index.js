@@ -10,6 +10,9 @@ const router = Router();
 
 router.use(isAuthenticated)
 router.get('/assigned', wrap(controller.listAssignedToMe))
-router.get('/teams', wrap(controller.listTeamGoals))
+router.get('/team', wrap(controller.listTeamGoals))
+router.get('/organization', wrap(controller.listOrganizationGoals))
+
+router.get('/:id', wrap(controller.show))
 
 export default router

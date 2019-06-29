@@ -16,16 +16,10 @@ const TeamRoleSchema = new Schema({
 
 const TeamSchema = new Schema({
   _id: { type: String, default: uuid.v4 },
-  name: {
-    type: String,
-    required: true,
+  name: { type: String, required: true, },
+  organization_id: { type: String, required: true, },
 
-  },
-  organization_id: {
-    type: String,
-    required: true,
-
-  },
+  // refs
   team_roles: [ TeamRoleSchema ]
 
 });
