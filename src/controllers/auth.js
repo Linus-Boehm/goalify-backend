@@ -44,7 +44,7 @@ export async function register(req, res) {
 
   const user = req.body;
   try {
-    if (!user.organization_name) {
+    if (!user.organization_id) {
       const org = await OrganizationModel.create({ name: user.organization_name }).exec()
       user.organization_id = org._id;
       user.role = "organization_admin"
