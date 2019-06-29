@@ -24,13 +24,14 @@ async function seedDatabase() {
 
   // ---
   // <Users>
-
+  //OrganizationAdmin
   const johanna = await factory.create('user', {
     firstname: 'johanna',
     lastname: 'greedy',
     email: 'johanna@orga.com',
     password: '1234!-johanna',
-    organization_id: organizaton._id
+    organization_id: organizaton._id,
+    role: 'organization_admin'
   });
 
   const peter = await factory.create('user', {
@@ -57,16 +58,16 @@ async function seedDatabase() {
     name: 'Marketing',
     organization_id: organizaton._id,
   });
-  await marketingTeam.addUser(johanna, 'member'); // test overwrite
-  await marketingTeam.addUser(johanna, 'leader');
-  await marketingTeam.addUser(peter, 'member');
+  await marketingTeam.addUser(johanna._id, 'member'); // test overwrite
+  await marketingTeam.addUser(johanna._id, 'leader');
+  await marketingTeam.addUser(peter._id, 'member');
 
   const salesTeam = await factory.create('team', {
     name: 'Sales',
     organization_id: organizaton._id,
   });
-  await salesTeam.addUser(hubert, 'leader');
-  await salesTeam.addUser(peter, 'member');
+  await salesTeam.addUser(hubert._id, 'leader');
+  await salesTeam.addUser(peter._id, 'member');
 
   // </Teams>
   // ---

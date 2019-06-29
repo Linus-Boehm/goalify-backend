@@ -3,9 +3,11 @@ import { Schema, model } from 'mongoose';
 import uuid from 'uuid'
 
 const TeamRoleSchema = new Schema({
+  _id: false,
   user_id: {
     type: String,
     required: true,
+    ref: 'User'
   },
   role: {
     type: String,
@@ -46,5 +48,7 @@ TeamSchema.methods.addUser = async function (userId, role) {
 
   return this.save()
 };
+
+
 
 export default model('Team', TeamSchema);
