@@ -1,39 +1,39 @@
 "use strict";
 //Loads .env file into process.env
-import express from 'express';
-import * as http from 'http';
+import express from "express";
+import * as http from "http";
 
-import * as middlewares from './routes/middlewares'
-import mongoose from 'mongoose';
-import * as config from './config';
-import routes from './routes'
+import * as middlewares from "./routes/middlewares";
+import mongoose from "mongoose";
+import * as config from "./config";
+import routes from "./routes";
 import { applyBasicMiddlewares } from "./routes/middlewares";
 
 // Set the port to the API.
 const app = express();
-app.set('port', normalizePort(config.port || 3000));
+app.set("port", normalizePort(config.port || 3000));
 
 // apply middlewares and routes
 applyBasicMiddlewares(app);
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.json({
-    name: 'Hello Goalify'
+    name: "Hello Goalify"
   });
 });
-app.use('/', routes);
-app.use(middlewares.errorHandler)
+app.use("/", routes);
+app.use(middlewares.errorHandler);
 
 //Create a http server based on Express
 const server = http.createServer(app);
 
-server.on('listening', () => {
+server.on("listening", () => {
   let addr = server.address();
-  let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
+  let bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
   console.log(`Server is listening on port ${bind}`);
 });
 
-server.on('error', (err) => {
-  console.log('Server Error: ', err.message);
+server.on("error", err => {
+  console.log("Server Error: ", err.message);
   process.exit(err.statusCode);
 });
 
@@ -44,19 +44,17 @@ mongoose
     useCreateIndex: true
   })
   .then(async () => {
-    server.listen(app.get('port'))
-
+    server.listen(app.get("port"));
   })
   .catch(err => {
-    console.log('Error connecting to the database', err.message);
+    console.log("Error connecting to the database", err.message);
     process.exit(err.statusCode);
   });
-
 
 // ---
 
 function normalizePort(val) {
-  let _port = (typeof val === 'string') ? parseInt(val, 10) : val;
+  let _port = typeof val === "string" ? parseInt(val, 10) : val;
   if (isNaN(_port)) {
     return val;
   } else if (_port >= 0) {
@@ -65,4 +63,3 @@ function normalizePort(val) {
     return false;
   }
 }
-
