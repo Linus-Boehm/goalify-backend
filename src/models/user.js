@@ -1,9 +1,9 @@
 "use strict";
 
-import bcrypt from 'bcryptjs'
-import { Schema, model } from 'mongoose';
-import uuid from 'uuid'
-import * as config from '../config';
+import bcrypt from "bcryptjs";
+import { Schema, model } from "mongoose";
+import uuid from "uuid";
+import * as config from "../config";
 
 const UserSchema = new Schema({
   _id: { type: String, default: uuid.v4 },
@@ -15,22 +15,19 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: true
   },
   firstname: {
     type: String,
-    required: true,
-
+    required: true
   },
   lastname: {
     type: String,
-    required: true,
-
+    required: true
   },
   role: {
     type: String,
-    default: "employee",
-
+    default: "employee"
   },
   organization_id: {
     type: String,
@@ -39,16 +36,16 @@ const UserSchema = new Schema({
   }
 });
 
-UserSchema.set('versionKey', false);
+UserSchema.set("versionKey", false);
 
-UserSchema.pre('save', async function () {
-  if (this.isModified('password')) {
+UserSchema.pre("save", async function() {
+  if (this.isModified("password")) {
     this.password = bcrypt.hashSync(this.password, 10);
   }
 });
 
-UserSchema.methods.comparePassword = async function (plaintext) {
+UserSchema.methods.comparePassword = async function(plaintext) {
   return bcrypt.compareSync(plaintext, this.password);
 };
 
-export default model('User', UserSchema);
+export default model("User", UserSchema);

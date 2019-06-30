@@ -2,6 +2,7 @@
 
 import UserModel from "../models/user";
 import OrganizationModel from "../models/organization";
+import { validationResult } from "express-validator/check";
 
 export async function organization(req, res) {
   let orga = await OrganizationModel.findById(
@@ -51,4 +52,30 @@ export async function remove(req, res) {
   let user = await UserModel.deleteOne({ _id: req.params.id }).exec();
   console.log(user);
   res.status(200).json(user);
+}
+
+export async function create(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  const user = req.body;
+
+  try {
+    let userObj = await UserModel.create(user);
+    // if user is registered without errors
+    // create a token
+
+    res.status(200).json({ user: userObj });
+  } catch (error) {
+    if (error.code === 11000) {
+      res.status(409).json({
+        error: "User already exists",
+        message: error.message
+      });
+    } else {
+      throw error;
+    }
+  }
 }
