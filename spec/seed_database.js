@@ -29,7 +29,7 @@ async function seedDatabase() {
     firstname: 'johanna',
     lastname: 'greedy',
     email: 'johanna@orga.com',
-    password: '1234!-johanna',
+    password: '12345678',
     organization_id: organizaton._id,
     role: 'organization_admin'
   });
@@ -38,7 +38,7 @@ async function seedDatabase() {
     firstname: 'peter',
     lastname: 'lustig',
     email: 'peter@orga.com',
-    password: '1234!-peter',
+    password: '12345678',
     organization_id: organizaton._id
   });
 
@@ -46,7 +46,7 @@ async function seedDatabase() {
     firstname: 'hubert',
     lastname: 'anderson',
     email: 'hubert@orga.com',
-    password: '1234!-hubert',
+    password: '12345678',
     organization_id: organizaton._id
   });
 
