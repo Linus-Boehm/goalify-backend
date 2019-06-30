@@ -46,3 +46,9 @@ export async function list(req, res) {
     });
   res.status(200).json(users);
 }
+export async function remove(req, res) {
+  console.log(req.body);
+  let user = await UserModel.deleteOne({ _id: req.params.id }).exec();
+  console.log(user);
+  res.status(200).json(user);
+}

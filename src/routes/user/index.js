@@ -15,5 +15,6 @@ router.get("/me/organization", isAuthenticated, wrap(controller.organization));
 
 router.get("/", wrap(controller.list));
 router.get("/:id", wrap(controller.show));
+router.delete("/:id", wrap(controller.remove));
 
 export default router;
