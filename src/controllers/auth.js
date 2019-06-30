@@ -48,6 +48,10 @@ export async function register(req, res) {
       const org = await OrganizationModel.create({ name: user.organization_name })
       user.organization_id = org._id;
       user.role = "organization_admin"
+    }else if(user.organization_id !== req.access_token.organization_id){
+      res.status(422).json({
+        error: 'Invalid organization ID'
+      })
     }
 
 
