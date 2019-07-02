@@ -30,7 +30,7 @@ TeamSchema.set('versionKey', false);
 
 TeamSchema.methods.addUser = async function ({user_id, role}) {
   let teamRoleToAdd = { user_id, role };
-  console.log(teamRoleToAdd)
+
   // Find team role of user
   let existingTeamRoleIndex = this.team_roles.findIndex((el) => el.user_id === user_id);
 
