@@ -17,5 +17,7 @@ router.get('/:id', wrap(controller.show));
 
 router.post('/', wrap(controller.create));
 
+router.put("/:id", wrap(controller.update));
+
 
 export default router

@@ -10,13 +10,15 @@ function genArchivedAtQuery(isArchived) {
   return isArchived ? { $exists: true } : null;
 }
 
+const assingeePopulate = { path: 'assignee', select: 'firstname lastname' }
+
 export async function show(req, res) {
   const userId = req.access_token.id;
   const organizationId = req.access_token.organization_id;
 
   let goal = await GoalModel
     .findById(req.params.id)
-    .populate('assignee', 'firstname lastname')
+    .populate(assingeePopulate)
     .exec()
 
   if (!goal || goal.deleted_at)
@@ -53,7 +55,7 @@ export async function listAssignedToMe(req, res) {
       archived_at: genArchivedAtQuery(isArchived),
       deleted_at: null
     })
-    .populate('assignee', 'firstname lastname')
+    .populate(assingeePopulate)
     .exec();
 
 
@@ -80,7 +82,9 @@ export async function listTeamGoals(req, res) {
     related_to: { $in: teamIds },
     archived_at: genArchivedAtQuery(isArchived),
     deleted_at: null
-  }).exec()
+  })
+    .populate(assingeePopulate)
+    .exec()
 
   res.status(200).json(goals)
 }
@@ -101,6 +105,7 @@ export async function listOrganizationGoals(req, res) {
       archived_at: genArchivedAtQuery(isArchived),
       deleted_at: null
     })
+    .populate(assingeePopulate)
     .exec();
 
   res.status(200).json(goals)
@@ -117,7 +122,7 @@ export async function create(req, res) {
 
   console.log(req.body);
 
-  const goal = await GoalModel.create({
+  let goal = await GoalModel.create({
     title: 'New Goal',
     ...req.body,
 
@@ -125,5 +130,35 @@ export async function create(req, res) {
     organization_id: organizationId
   });
 
+  goal = await goal.populate(assingeePopulate).execPopulate();
+
+
   res.status(200).json(goal);
+}
+
+export async function update(req, res) {
+
+  const { id } = req.params;
+
+  const updatedData = req.body;
+
+  delete updatedData._id;
+  delete updatedData.organization_id;
+  delete updatedData.created_by;
+
+  let goal = await GoalModel
+    .findOneAndUpdate(
+      { _id: id },
+      updatedData,
+      { new: true, useFindAndModify: false })
+    .populate(assingeePopulate)
+    .exec();
+
+  if (!goal) {
+    return res.status(404).json({
+      message: `Could not find goal with id ${id}`
+    });
+  }
+
+  res.status(200).json(goal)
 }

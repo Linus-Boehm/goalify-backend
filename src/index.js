@@ -38,6 +38,7 @@ server.on("error", err => {
 });
 
 //Connect to the MongoDB database; then start the server
+
 mongoose
   .connect(config.mongoURI, {
     useNewUrlParser: true,
