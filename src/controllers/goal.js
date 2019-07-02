@@ -14,7 +14,10 @@ export async function show(req, res) {
   const userId = req.access_token.id;
   const organizationId = req.access_token.organization_id;
 
-  let goal = await GoalModel.findById(req.params.id).exec()
+  let goal = await GoalModel
+    .findById(req.params.id)
+    .populate('assignee', 'firstname lastname')
+    .exec()
 
   if (!goal || goal.deleted_at)
     return res.status(404).json({
@@ -44,11 +47,14 @@ export async function listAssignedToMe(req, res) {
     });
   }
 
-  const goals = await GoalModel.find({
-    assignee: userId,
-    archived_at: genArchivedAtQuery(isArchived),
-    deleted_at: null
-  }).exec();
+  const goals = await GoalModel
+    .find({
+      assignee: userId,
+      archived_at: genArchivedAtQuery(isArchived),
+      deleted_at: null
+    })
+    .populate('assignee', 'firstname lastname')
+    .exec();
 
 
   res.status(200).json(goals)
@@ -64,7 +70,10 @@ export async function listTeamGoals(req, res) {
     });
   }
 
-  const teams = await TeamModel.find({ team_roles: { $elemMatch: { user_id: userId } } }).exec()
+  const teams = await TeamModel
+    .find({ team_roles: { $elemMatch: { user_id: userId } } })
+    .exec()
+
   const teamIds = teams.map(el => el._id)
 
   const goals = await GoalModel.find({
@@ -86,11 +95,13 @@ export async function listOrganizationGoals(req, res) {
     });
   }
 
-  const goals = await GoalModel.find({
-    related_to: organizationId,
-    archived_at: genArchivedAtQuery(isArchived),
-    deleted_at: null
-  }).exec();
+  const goals = await GoalModel
+    .find({
+      related_to: organizationId,
+      archived_at: genArchivedAtQuery(isArchived),
+      deleted_at: null
+    })
+    .exec();
 
   res.status(200).json(goals)
 }

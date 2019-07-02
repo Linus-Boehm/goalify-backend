@@ -29,7 +29,7 @@ async function seedDatabase() {
     firstname: 'johanna',
     lastname: 'greedy',
     email: 'johanna@orga.com',
-    password: '1234!-johanna',
+    password: '12345678',
     organization_id: organizaton._id,
     role: 'organization_admin'
   });
@@ -38,7 +38,7 @@ async function seedDatabase() {
     firstname: 'peter',
     lastname: 'lustig',
     email: 'peter@orga.com',
-    password: '1234!-peter',
+    password: '12345678',
     organization_id: organizaton._id
   });
 
@@ -46,7 +46,7 @@ async function seedDatabase() {
     firstname: 'hubert',
     lastname: 'anderson',
     email: 'hubert@orga.com',
-    password: '1234!-hubert',
+    password: '12345678',
     organization_id: organizaton._id
   });
 
@@ -74,23 +74,50 @@ async function seedDatabase() {
   // <Goals>
 
   const privateGoal = await factory.create('goal', {
-    title: 'Private Goal',
+    title: 'Decrease stress level',
     is_private: true,
     created_by: peter._id,
     assignee: peter._id,
     organization_id: organizaton._id
   });
 
+  const privateSubGoal0 = await factory.create('goal', {
+    title: 'Meditate for 10 minutes every day',
+    is_private: true,
+    created_by: peter._id,
+    assignee: peter._id,
+    parent_goal: privateGoal._id,
+    organization_id: organizaton._id
+  });
+
   // TODO add to OA
   const objectiveAgreementGoal = await factory.create('goal', {
-    title: 'Objective agreement Goal',
+    title: 'Convert 25 salesforce Leads',
     created_by: peter._id,
     assignee: peter._id,
     organization_id: organizaton._id
   });
 
+  const objectiveAgreementSubGoal0 = await factory.create('goal', {
+    title: 'Prioritize existing salesforce Leads',
+    is_private: true,
+    created_by: peter._id,
+    assignee: peter._id,
+    parent_goal: objectiveAgreementGoal._id,
+    organization_id: organizaton._id
+  });
+
+  const objectiveAgreementSubGoal1 = await factory.create('goal', {
+    title: 'Call 2 salesforce Leads per Day',
+    is_private: true,
+    created_by: peter._id,
+    assignee: peter._id,
+    parent_goal: objectiveAgreementGoal._id,
+    organization_id: organizaton._id
+  });
+
   const teamGoal = await factory.create('goal', {
-    title: 'Team Goal',
+    title: 'Increase social media attention by 15%',
     created_by: johanna._id,
     related_to: marketingTeam._id,
     related_model: 'Team',
@@ -98,7 +125,7 @@ async function seedDatabase() {
   });
 
   const organizationGoal = await factory.create('goal', {
-    title: 'Organization Goal',
+    title: 'Increase revenue by 20%',
     created_by: hubert._id,
     related_to: organizaton._id,
     related_model: 'Organization',
