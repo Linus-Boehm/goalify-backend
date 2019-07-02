@@ -58,9 +58,9 @@ async function seedDatabase() {
     name: 'Marketing',
     organization_id: organizaton._id,
   });
-  await marketingTeam.addUser({ user_id: johanna._id, role: 'member' }); // test overwrite
-  await marketingTeam.addUser({ user_id: johanna._id, role: 'leader' });
-  await marketingTeam.addUser({ user_id: peter._id, role: 'member' });
+  await marketingTeam.addUser({ user_id: peter._id, role: 'member' }); // test overwrite
+  await marketingTeam.addUser({ user_id: peter._id, role: 'leader' });
+  await marketingTeam.addUser({ user_id: johanna._id, role: 'member' });
 
   const salesTeam = await factory.create('team', {
     name: 'Sales',

@@ -106,3 +106,24 @@ export async function listOrganizationGoals(req, res) {
   res.status(200).json(goals)
 }
 
+export async function create(req, res) {
+  const userId = req.access_token.id;
+  const organizationId = req.access_token.organization_id;
+  if (!organizationId) {
+    return res.status(400).json({
+      message: `organization_id in access_token is null`
+    });
+  }
+
+  console.log(req.body);
+
+  const goal = await GoalModel.create({
+    title: 'New Goal',
+    ...req.body,
+
+    created_by: userId,
+    organization_id: organizationId
+  });
+
+  res.status(200).json(goal);
+}

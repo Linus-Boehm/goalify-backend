@@ -13,6 +13,9 @@ router.get('/assigned', wrap(controller.listAssignedToMe))
 router.get('/team', wrap(controller.listTeamGoals))
 router.get('/organization', wrap(controller.listOrganizationGoals))
 
-router.get('/:id', wrap(controller.show))
+router.get('/:id', wrap(controller.show));
+
+router.post('/', wrap(controller.create));
+
 
 export default router
