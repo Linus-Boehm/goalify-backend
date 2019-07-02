@@ -5,7 +5,6 @@ import { wrap } from 'async-middleware';
 
 import { isAuthenticated } from '../middlewares';
 import * as controller from '../../controllers/team';
-import memberRouter from './member'
 
 const router = Router();
 
@@ -22,6 +21,8 @@ router.put('/:id', wrap(controller.update));
 router.delete('/:id', wrap(controller.remove));
 
 
-router.use("/:id/member", memberRouter);
+router.put("/:id/member/", wrap(controller.updateMembers));
+
+router.delete("/:id/member/:userId", wrap(controller.removeMembers));
 
 export default router

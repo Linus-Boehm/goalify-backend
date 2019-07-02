@@ -33,9 +33,14 @@ export function isAuthenticated(req, res, next) {
   if (header) {
     // Remove Bearer from string
     let token = header.split(' ')[ 1 ]
-    req.access_token = jwt.verify(token, JwtSecret);
+    try{
+      req.access_token = jwt.verify(token, JwtSecret);
+      return next()
+    }catch(e){
+    }
 
-    return next()
+
+
   }
   res.status(403).send("Authentication error")
 }

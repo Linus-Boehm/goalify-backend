@@ -61,6 +61,17 @@ export async function update(req, res) {
   res.status(200).json(team);
 }
 
+export async function updateMembers(req, res) {
+  let team = await TeamModel.findById(req.params.id)
+  let roles = await team.addUser(req.body)
+  res.status(200).json(roles);
+}
+export async function removeMembers(req, res) {
+  let team = await TeamModel.findById(req.params.id)
+  let roles = await team.removeUser(req.params.userId)
+  res.status(200).json(roles);
+}
+
 export async function remove(req, res) {
   console.log(req.body);
   let team = await TeamModel.deleteOne({ _id: req.params.id }).exec();
