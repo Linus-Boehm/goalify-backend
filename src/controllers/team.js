@@ -1,7 +1,6 @@
 "use strict";
 
 import TeamModel from "../models/team";
-import UserModel from "../models/user";
 
 export async function list(req, res) {
   let teams = await TeamModel.find({
@@ -66,6 +65,7 @@ export async function updateMembers(req, res) {
   let roles = await team.addUser(req.body)
   res.status(200).json(roles);
 }
+
 export async function removeMembers(req, res) {
   let team = await TeamModel.findById(req.params.id)
   let roles = await team.removeUser(req.params.userId)

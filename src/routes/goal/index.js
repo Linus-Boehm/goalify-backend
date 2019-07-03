@@ -10,7 +10,7 @@ const router = Router();
 
 router.use(isAuthenticated)
 router.get('/assigned', wrap(controller.listAssignedToMe))
-router.get('/team', wrap(controller.listTeamGoals))
+router.get('/team/:team_id', wrap(controller.listTeamGoals))
 router.get('/organization', wrap(controller.listOrganizationGoals))
 
 router.get('/:id', wrap(controller.show));

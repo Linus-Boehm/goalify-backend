@@ -10,7 +10,7 @@ function genArchivedAtQuery(isArchived) {
   return isArchived ? { $exists: true } : null;
 }
 
-const assingeePopulate = { path: 'assignee', select: 'firstname lastname' }
+export const assingeePopulateConfig = { path: 'assignee', select: 'firstname lastname' }
 
 export async function show(req, res) {
   const userId = req.access_token.id;
@@ -18,7 +18,7 @@ export async function show(req, res) {
 
   let goal = await GoalModel
     .findById(req.params.id)
-    .populate(assingeePopulate)
+    .populate(assingeePopulateConfig)
     .exec()
 
   if (!goal || goal.deleted_at)
@@ -55,7 +55,7 @@ export async function listAssignedToMe(req, res) {
       archived_at: genArchivedAtQuery(isArchived),
       deleted_at: null
     })
-    .populate(assingeePopulate)
+    .populate(assingeePopulateConfig)
     .exec();
 
 
@@ -65,6 +65,8 @@ export async function listAssignedToMe(req, res) {
 export async function listTeamGoals(req, res) {
   const isArchived = !!req.query.is_archived;
 
+  const teamId = req.params.team_id;
+
   const userId = req.access_token.id;
   if (!userId) {
     return res.status(400).json({
@@ -72,18 +74,26 @@ export async function listTeamGoals(req, res) {
     });
   }
 
-  const teams = await TeamModel
-    .find({ team_roles: { $elemMatch: { user_id: userId } } })
-    .exec()
+  const team = await TeamModel.findById(teamId).exec()
+  if (!team || !team._id) {
+    return res.status(404).json({
+      message: `Team with Id ${team._id} not found`
+    });
+  }
 
-  const teamIds = teams.map(el => el._id)
+  const role = team.getTeamRole({ user_id: userId });
+  if (!role) {
+    return res.status(403).json({
+      message: `User has no access to Team ${team._id}`
+    });
+  }
 
   const goals = await GoalModel.find({
-    related_to: { $in: teamIds },
+    related_to: team._id,
     archived_at: genArchivedAtQuery(isArchived),
     deleted_at: null
   })
-    .populate(assingeePopulate)
+    .populate(assingeePopulateConfig)
     .exec()
 
   res.status(200).json(goals)
@@ -105,7 +115,7 @@ export async function listOrganizationGoals(req, res) {
       archived_at: genArchivedAtQuery(isArchived),
       deleted_at: null
     })
-    .populate(assingeePopulate)
+    .populate(assingeePopulateConfig)
     .exec();
 
   res.status(200).json(goals)
@@ -130,7 +140,7 @@ export async function create(req, res) {
     organization_id: organizationId
   });
 
-  goal = await goal.populate(assingeePopulate).execPopulate();
+  goal = await goal.populate(assingeePopulateConfig).execPopulate();
 
 
   res.status(200).json(goal);
@@ -151,7 +161,7 @@ export async function update(req, res) {
       { _id: id },
       updatedData,
       { new: true, useFindAndModify: false })
-    .populate(assingeePopulate)
+    .populate(assingeePopulateConfig)
     .exec();
 
   if (!goal) {

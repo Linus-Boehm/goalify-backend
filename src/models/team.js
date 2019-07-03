@@ -28,7 +28,11 @@ const TeamSchema = new Schema({
 
 TeamSchema.set('versionKey', false);
 
-TeamSchema.methods.addUser = async function ({user_id, role}) {
+TeamSchema.methods.getTeamRole = function ({ user_id }) {
+  return this.team_roles.find((el) => el.user_id === user_id);
+};
+
+TeamSchema.methods.addUser = async function ({ user_id, role }) {
   let teamRoleToAdd = { user_id, role };
 
   // Find team role of user
