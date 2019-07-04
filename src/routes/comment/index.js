@@ -10,7 +10,7 @@ const router = Router();
 
 router.use(isAuthenticated);
 
-router.get("/goal", wrap(controller.listComments));
+router.get("/:goal_id", wrap(controller.listComments));
 
 router.post("/", wrap(controller.create));
 

@@ -12,13 +12,13 @@ const CommentSchema = new Schema({
     required: true
   },
 
-  date: { type: Date, required: true },
+  date: { type: String, required: true },
 
   //refs
 
   created_by: { type: String, ref: "User", required: true },
 
-  related_to: { type: String, refPath: "related_model" },
+  related_to: { type: String, refPath: "related_model", required: true },
 
   related_model: { type: String }
 });
