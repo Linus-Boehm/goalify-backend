@@ -41,7 +41,7 @@ export async function create(req, res) {
   let team = await TeamModel.create({
     ...req.body,
     organization_id: req.access_token.organization_id
-  }).exec();
+  });
   console.log(team);
   res.status(200).json(team);
 }
