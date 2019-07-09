@@ -1,8 +1,7 @@
 "use strict";
 
-import TeamModel from '../models/team';
-import GoalModel from '../models/goal';
-
+import TeamModel from "../models/team";
+import GoalModel from "../models/goal";
 
 function genArchivedAtQuery(isArchived) {
   // $exists: existance of field is null, if field is null the field exists
@@ -10,16 +9,18 @@ function genArchivedAtQuery(isArchived) {
   return isArchived ? { $exists: true } : null;
 }
 
-export const assingeePopulateConfig = { path: 'assignee', select: 'firstname lastname' }
+export const assingeePopulateConfig = {
+  path: "assignee",
+  select: "firstname lastname"
+};
 
 export async function show(req, res) {
   const userId = req.access_token.id;
   const organizationId = req.access_token.organization_id;
 
-  let goal = await GoalModel
-    .findById(req.params.id)
+  let goal = await GoalModel.findById(req.params.id)
     .populate(assingeePopulateConfig)
-    .exec()
+    .exec();
 
   if (!goal || goal.deleted_at)
     return res.status(404).json({
@@ -29,14 +30,14 @@ export async function show(req, res) {
   if (goal.organization_id !== organizationId)
     return res.status(403).json({
       message: `Unauthorized - Goal is not in user's organization`
-    })
+    });
 
   if (goal.is_private && goal.created_by !== userId)
     return res.status(403).json({
       message: `Unauthorized - Goal is private`
-    })
+    });
 
-  res.status(200).json(goal)
+  res.status(200).json(goal);
 }
 
 export async function listAssignedToMe(req, res) {
@@ -49,17 +50,15 @@ export async function listAssignedToMe(req, res) {
     });
   }
 
-  const goals = await GoalModel
-    .find({
-      assignee: userId,
-      archived_at: genArchivedAtQuery(isArchived),
-      deleted_at: null
-    })
+  const goals = await GoalModel.find({
+    assignee: userId,
+    archived_at: genArchivedAtQuery(isArchived),
+    deleted_at: null
+  })
     .populate(assingeePopulateConfig)
     .exec();
 
-
-  res.status(200).json(goals)
+  res.status(200).json(goals);
 }
 
 export async function listTeamGoals(req, res) {
@@ -74,7 +73,7 @@ export async function listTeamGoals(req, res) {
     });
   }
 
-  const team = await TeamModel.findById(teamId).exec()
+  const team = await TeamModel.findById(teamId).exec();
   if (!team || !team._id) {
     return res.status(404).json({
       message: `Team with Id ${team._id} not found`
@@ -94,9 +93,9 @@ export async function listTeamGoals(req, res) {
     deleted_at: null
   })
     .populate(assingeePopulateConfig)
-    .exec()
+    .exec();
 
-  res.status(200).json(goals)
+  res.status(200).json(goals);
 }
 
 export async function listOrganizationGoals(req, res) {
@@ -109,16 +108,15 @@ export async function listOrganizationGoals(req, res) {
     });
   }
 
-  const goals = await GoalModel
-    .find({
-      related_to: organizationId,
-      archived_at: genArchivedAtQuery(isArchived),
-      deleted_at: null
-    })
+  const goals = await GoalModel.find({
+    related_to: organizationId,
+    archived_at: genArchivedAtQuery(isArchived),
+    deleted_at: null
+  })
     .populate(assingeePopulateConfig)
     .exec();
 
-  res.status(200).json(goals)
+  res.status(200).json(goals);
 }
 
 export async function create(req, res) {
@@ -133,7 +131,7 @@ export async function create(req, res) {
   console.log(req.body);
 
   let goal = await GoalModel.create({
-    title: 'New Goal',
+    title: "New Goal",
     ...req.body,
 
     created_by: userId,
@@ -142,12 +140,10 @@ export async function create(req, res) {
 
   goal = await goal.populate(assingeePopulateConfig).execPopulate();
 
-
   res.status(200).json(goal);
 }
 
 export async function update(req, res) {
-
   const { id } = req.params;
 
   const updatedData = req.body;
@@ -156,11 +152,10 @@ export async function update(req, res) {
   delete updatedData.organization_id;
   delete updatedData.created_by;
 
-  let goal = await GoalModel
-    .findOneAndUpdate(
-      { _id: id },
-      updatedData,
-      { new: true, useFindAndModify: false })
+  let goal = await GoalModel.findOneAndUpdate({ _id: id }, updatedData, {
+    new: true,
+    useFindAndModify: false
+  })
     .populate(assingeePopulateConfig)
     .exec();
 
@@ -170,5 +165,5 @@ export async function update(req, res) {
     });
   }
 
-  res.status(200).json(goal)
+  res.status(200).json(goal);
 }

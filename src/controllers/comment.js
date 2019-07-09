@@ -5,7 +5,7 @@ import GoalModel from "../models/goal";
 import { validationResult } from "express-validator/check";
 
 export async function listComments(req, res) {
-  const goalId = req.params.goal_id;
+  const related_to = req.params.related_to;
   const userId = req.access_token.id;
 
   if (!userId) {
@@ -15,7 +15,7 @@ export async function listComments(req, res) {
   }
 
   const comments = await CommentModel.find({
-    related_to: { $in: goalId }
+    related_to
   }).exec();
   console.log("HERE");
   console.log(comments);
@@ -24,12 +24,6 @@ export async function listComments(req, res) {
 }
 
 export async function create(req, res) {
-  const date = new Date().getDate();
-  const month = new Date().getMonth() + 1;
-  const year = new Date().getFullYear();
-  const hours = new Date().getHours();
-  const minutes = new Date().getMinutes();
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
@@ -37,7 +31,7 @@ export async function create(req, res) {
 
   const comment = req.body.comment;
   comment.created_by = req.access_token.id;
-  comment.date = new Date().toLocaleString();
+  comment.date = new Date();
   comment.related_to = req.body.goalId;
 
   try {
