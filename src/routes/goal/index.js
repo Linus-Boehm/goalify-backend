@@ -9,7 +9,8 @@ import * as controller from '../../controllers/goal';
 const router = Router();
 
 router.use(isAuthenticated)
-router.get('/assigned', wrap(controller.listAssignedToMe))
+router.get('/my', wrap(controller.listMyGoals))
+router.get('/agreement/:agreement_id', wrap(controller.listAgreementGoals))
 router.get('/team/:team_id', wrap(controller.listTeamGoals))
 router.get('/organization', wrap(controller.listOrganizationGoals))
 

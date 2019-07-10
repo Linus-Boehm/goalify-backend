@@ -71,6 +71,23 @@ async function seedDatabase() {
 
   // </Teams>
   // ---
+  // <Agreements>
+
+  const OA_marketing_peter_and_johanna = await factory.create('agreement', {
+    reviewer: johanna._id,
+    assignee: peter._id,
+    organizaton: organizaton._id
+  });
+
+  const OA_marketing_hubert_and_peter = await factory.create('agreement', {
+    reviewer: peter._id,
+    assignee: hubert._id,
+    organizaton: organizaton._id
+  });
+
+
+  // </Agreements>
+  // ---
   // <Goals>
 
   const privateGoal = await factory.create('goal', {
@@ -90,12 +107,13 @@ async function seedDatabase() {
     organization_id: organizaton._id
   });
 
-  // TODO add to OA
   const objectiveAgreementGoal = await factory.create('goal', {
     title: 'Convert 25 salesforce Leads',
     created_by: peter._id,
     assignee: peter._id,
-    organization_id: organizaton._id
+    organization_id: organizaton._id,
+    related_model: 'ObjectiveAgreement',
+    related_to: OA_marketing_peter_and_johanna
   });
 
   const objectiveAgreementSubGoal0 = await factory.create('goal', {
@@ -104,7 +122,9 @@ async function seedDatabase() {
     created_by: peter._id,
     assignee: peter._id,
     parent_goal: objectiveAgreementGoal._id,
-    organization_id: organizaton._id
+    organization_id: organizaton._id,
+    related_model: 'ObjectiveAgreement',
+    related_to: OA_marketing_peter_and_johanna
   });
 
   const objectiveAgreementSubGoal1 = await factory.create('goal', {
@@ -113,7 +133,18 @@ async function seedDatabase() {
     created_by: peter._id,
     assignee: peter._id,
     parent_goal: objectiveAgreementGoal._id,
-    organization_id: organizaton._id
+    organization_id: organizaton._id,
+    related_model: 'ObjectiveAgreement',
+    related_to: OA_marketing_peter_and_johanna
+  });
+
+  const objectiveAgreementGoal1 = await factory.create('goal', {
+    title: 'Improve Sales',
+    created_by: hubert._id,
+    assignee: peter._id,
+    organization_id: organizaton._id,
+    related_model: 'ObjectiveAgreement',
+    related_to: OA_marketing_hubert_and_peter
   });
 
   const teamGoal = await factory.create('goal', {

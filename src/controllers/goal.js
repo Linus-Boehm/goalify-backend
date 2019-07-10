@@ -2,6 +2,7 @@
 
 import TeamModel from '../models/team';
 import GoalModel from '../models/goal';
+import ObjectiveAgreementModel from '../models/objective_agreement';
 
 
 function genArchivedAtQuery(isArchived) {
@@ -39,7 +40,7 @@ export async function show(req, res) {
   res.status(200).json(goal)
 }
 
-export async function listAssignedToMe(req, res) {
+export async function listMyGoals(req, res) {
   const isArchived = !!req.query.is_archived;
 
   const userId = req.access_token.id;
@@ -52,8 +53,10 @@ export async function listAssignedToMe(req, res) {
   const goals = await GoalModel
     .find({
       assignee: userId,
+      related_to: null,
+
       archived_at: genArchivedAtQuery(isArchived),
-      deleted_at: null
+      deleted_at: null,
     })
     .populate(assingeePopulateConfig)
     .exec();
@@ -61,6 +64,37 @@ export async function listAssignedToMe(req, res) {
 
   res.status(200).json(goals)
 }
+
+export async function listAgreementGoals(req, res) {
+  const isArchived = !!req.query.is_archived;
+
+  const userId = req.access_token.id;
+
+  const agreementId = req.params.agreement_id;
+  const agreement = await ObjectiveAgreementModel.findById(agreementId).exec()
+  if (!agreement || !agreement._id) {
+    return res.status(404).json({
+      message: `Objective Agreement with Id ${agreementId} not found`
+    });
+  }
+
+  if (userId !== agreement.assignee && userId !== agreement.reviewer) {
+    return res.status(403).json({
+      message: `User has no access to Agreement ${agreement._id}`
+    });
+  }
+
+  const goals = await GoalModel.find({
+    related_to: agreement._id,
+    archived_at: genArchivedAtQuery(isArchived),
+    deleted_at: null
+  })
+    .populate(assingeePopulateConfig)
+    .exec()
+
+  res.status(200).json(goals)
+}
+
 
 export async function listTeamGoals(req, res) {
   const isArchived = !!req.query.is_archived;
@@ -77,7 +111,7 @@ export async function listTeamGoals(req, res) {
   const team = await TeamModel.findById(teamId).exec()
   if (!team || !team._id) {
     return res.status(404).json({
-      message: `Team with Id ${team._id} not found`
+      message: `Team with Id ${teamId} not found`
     });
   }
 

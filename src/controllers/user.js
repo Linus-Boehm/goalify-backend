@@ -26,6 +26,7 @@ export async function me(req, res) {
     });
   let copy = { ...user._doc };
   delete copy.password;
+  console.log(copy)
   res.status(200).json(copy);
 }
 
