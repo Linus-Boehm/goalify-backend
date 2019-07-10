@@ -1,6 +1,7 @@
 "use strict";
 
 import UserModel from "../models/user";
+import TeamModel from "../models/team";
 import OrganizationModel from "../models/organization";
 import { validationResult } from "express-validator/check";
 
@@ -28,6 +29,12 @@ export async function me(req, res) {
   delete copy.password;
   console.log(copy)
   res.status(200).json(copy);
+}
+
+export async function teams(req, res) {
+  let teams = await TeamModel.find({team_roles:{$elemMatch:{user_id:req.access_token.id}}}).exec();
+
+  res.status(200).json(teams);
 }
 
 export async function show(req, res) {
