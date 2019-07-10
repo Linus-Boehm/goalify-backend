@@ -26,12 +26,13 @@ export async function login(req, res) {
   if (!isPasswordValid) {
     return res.status(401).send({ token: null });
   }
-
+  const teams = await user.loadTeams();
   const token = TokenService.signToken(user);
 
   res.status(200).json({
     token,
-    user
+    user,
+    teams
   });
 }
 

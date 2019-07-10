@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { Schema, model } from "mongoose";
 import uuid from "uuid";
 import * as config from "../config";
+import TeamModel from "./team";
 
 const UserSchema = new Schema({
   _id: { type: String, default: uuid.v4 },
@@ -46,6 +47,10 @@ UserSchema.pre("save", async function() {
 
 UserSchema.methods.comparePassword = async function(plaintext) {
   return bcrypt.compareSync(plaintext, this.password);
+};
+
+UserSchema.methods.loadTeams = async function() {
+  return TeamModel.find({team_roles:{$elemMatch:{user_id:this._id}}}).exec();
 };
 
 export default model("User", UserSchema);
