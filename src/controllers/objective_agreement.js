@@ -1,6 +1,8 @@
 "use strict";
 
 import ObjectiveAgreementModel from "../models/objective_agreement";
+import GoalModel from "../models/goal";
+import { assingeePopulateConfig } from "./goal";
 
 export async function listMy(req, res) {
   const userId = req.access_token.id;
@@ -44,16 +46,21 @@ export async function create(req, res) {
 }
 
 export async function update(req, res) {
-  const agreement = await ObjectiveAgreementModel.updateOne(
+  const agreement = await ObjectiveAgreementModel.findOneAndUpdate(
     { _id: req.params.id },
     {
       ...req.body,
       organization_id: req.access_token.organization_id,
       _id: req.params.id
+    },
+    {
+      new: true,
+      useFindAndModify: false
     }
   ).exec();
   res.status(200).json(agreement);
 }
+
 
 export async function remove(req, res) {
   const agreement = await ObjectiveAgreementModel.findById(req.params.id).exec();
