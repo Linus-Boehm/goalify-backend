@@ -12,6 +12,7 @@ router.use(isAuthenticated);
 
 router.get("/me", isAuthenticated, wrap(controller.me));
 router.get("/me/organization", isAuthenticated, wrap(controller.organization));
+router.get("/me/teams", isAuthenticated, wrap(controller.teams));
 
 router.get("/", wrap(controller.list));
 router.get("/:id", wrap(controller.show));

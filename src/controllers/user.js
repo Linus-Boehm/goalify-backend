@@ -1,6 +1,7 @@
 "use strict";
 
 import UserModel from "../models/user";
+import TeamModel from "../models/team";
 import OrganizationModel from "../models/organization";
 import { validationResult } from "express-validator/check";
 
@@ -18,7 +19,7 @@ export async function organization(req, res) {
 
 export async function me(req, res) {
   let user = await UserModel.findById(req.access_token.id).exec();
-
+  let teams = await user.loadTeams()
   if (!user)
     return res.status(404).json({
       error: "Not Found",
@@ -26,7 +27,14 @@ export async function me(req, res) {
     });
   let copy = { ...user._doc };
   delete copy.password;
-  res.status(200).json(copy);
+
+  res.status(200).json({ user: copy, teams });
+}
+
+export async function teams(req, res) {
+  let teams = await TeamModel.find({ team_roles: { $elemMatch: { user_id: req.access_token.id } } }).exec();
+
+  res.status(200).json(teams);
 }
 
 export async function show(req, res) {
@@ -37,6 +45,7 @@ export async function show(req, res) {
     });
   res.status(200).json(user);
 }
+
 export async function list(req, res) {
   let users = await UserModel.find({
     organization_id: req.access_token.organization_id
@@ -47,6 +56,7 @@ export async function list(req, res) {
     });
   res.status(200).json(users);
 }
+
 export async function remove(req, res) {
   console.log(req.body);
   let user = await UserModel.deleteOne({ _id: req.params.id }).exec();

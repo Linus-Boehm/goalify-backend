@@ -1,5 +1,5 @@
 "use strict";
-import { Schema, model } from 'mongoose';
+import {Schema, model, Decimal128} from 'mongoose';
 import uuid from 'uuid'
 
 const GOAL_TYPE = {
@@ -7,6 +7,14 @@ const GOAL_TYPE = {
   COUNT: 'count',
   BOOLEAN: 'boolean'
 };
+
+
+const ProgressSchema = new Schema({
+  _id: { type: String, default: uuid.v4 },
+  date: { type: Date },
+  is_reviewed: { type: Boolean },
+  value: {type: Decimal128}
+});
 
 const GoalSchema = new Schema({
   _id: { type: String, default: uuid.v4 },
@@ -17,21 +25,26 @@ const GoalSchema = new Schema({
   archived_at: { type: Date },
 
   is_private: { type: Boolean },
-
+  progress: [ ProgressSchema ],
   progress_type: { type: String }, // enum GOAL_TYPE
-  progress: { type: Number },
+  maximum_progress: { type: Number },
+  oa_weight: { type: Number },
 
   // refs
-  created_by: { type: String, ref: 'User', required: true },
-  parent_goal: { type: String, ref: 'Goal' },
-  assignee: { type: String, ref: 'User' },
-  reviewer: { type: String, ref: 'User' },
-  organization_id: { type: String, ref: 'Organization', required: true, index: true },
-  related_to: { type: String, refPath: 'related_model' },
+  created_by: { type: String, ref: "User", required: true },
+  parent_goal: { type: String, ref: "Goal" },
+  assignee: { type: String, ref: "User" },
+  reviewer: { type: String, ref: "User" },
+  organization_id: {
+    type: String,
+    ref: "Organization",
+    required: true,
+    index: true
+  },
+  related_to: { type: String, refPath: "related_model" },
   related_model: { type: String }
-
 });
 
-GoalSchema.set('versionKey', false);
+GoalSchema.set("versionKey", false);
 
-export default model('Goal', GoalSchema);
+export default model("Goal", GoalSchema);
