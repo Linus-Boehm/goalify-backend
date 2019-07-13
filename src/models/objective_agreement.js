@@ -8,8 +8,8 @@ const ObjectiveAgreementSchema = new Schema({
   end_date: { type: Date },
   description: { type: String },
 
-  bonus: { type: Number },
-  max_bonus: { type: Number },
+  bonus: { type: String },
+  max_bonus: { type: String },
 
   assignee_confirmed: { type: Boolean, default: false },
   reviewer_confirmed: { type: Boolean, default: false },
