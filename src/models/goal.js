@@ -1,7 +1,13 @@
 "use strict";
-import { Schema, model } from 'mongoose';
+import {Schema, model, Decimal128} from 'mongoose';
 import uuid from 'uuid'
 
+const ProgressSchema = new Schema({
+  _id: { type: String, default: uuid.v4 },
+  date: { type: Date },
+  is_reviewed: { type: Boolean },
+  value: {type: Decimal128}
+})
 const GoalSchema = new Schema({
   _id: { type: String, default: uuid.v4 },
   title: { type: String, required: true },
@@ -11,7 +17,7 @@ const GoalSchema = new Schema({
   archived_at: { type: Date },
 
   is_private: { type: Boolean },
-
+  progress: [ ProgressSchema ],
   // refs
   created_by: { type: String, ref: 'User', required: true },
   parent_goal: { type: String, ref: 'Goal' },
