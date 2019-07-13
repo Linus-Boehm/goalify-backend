@@ -2,6 +2,12 @@
 import { Schema, model } from 'mongoose';
 import uuid from 'uuid'
 
+const GOAL_TYPE = {
+  QUALITATIVE: 'qualitative',
+  COUNT: 'count',
+  BOOLEAN: 'boolean'
+};
+
 const GoalSchema = new Schema({
   _id: { type: String, default: uuid.v4 },
   title: { type: String, required: true },
@@ -11,6 +17,9 @@ const GoalSchema = new Schema({
   archived_at: { type: Date },
 
   is_private: { type: Boolean },
+
+  progress_type: { type: String }, // enum GOAL_TYPE
+  progress: { type: Number },
 
   // refs
   created_by: { type: String, ref: 'User', required: true },
