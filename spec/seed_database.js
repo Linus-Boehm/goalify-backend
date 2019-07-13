@@ -76,13 +76,21 @@ async function seedDatabase() {
   const OA_marketing_peter_and_johanna = await factory.create('agreement', {
     reviewer: johanna._id,
     assignee: peter._id,
-    organizaton: organizaton._id
+    team: marketingTeam._id,
+    organizaton: organizaton._id,
+
+    start_date: new Date(2019, 1, 1),
+    end_date: new Date(2019, 7, 1)
   });
 
   const OA_marketing_hubert_and_peter = await factory.create('agreement', {
     reviewer: peter._id,
     assignee: hubert._id,
-    organizaton: organizaton._id
+    team: salesTeam._id,
+    organizaton: organizaton._id,
+
+    start_date: new Date(2019, 1, 1),
+    end_date: new Date(2019, 12, 31)
   });
 
 
@@ -113,7 +121,7 @@ async function seedDatabase() {
     assignee: peter._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
-    related_to: OA_marketing_peter_and_johanna
+    related_to: OA_marketing_peter_and_johanna._id
   });
 
   const objectiveAgreementSubGoal0 = await factory.create('goal', {
@@ -124,7 +132,7 @@ async function seedDatabase() {
     parent_goal: objectiveAgreementGoal._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
-    related_to: OA_marketing_peter_and_johanna
+    related_to: OA_marketing_peter_and_johanna._id
   });
 
   const objectiveAgreementSubGoal1 = await factory.create('goal', {
@@ -135,7 +143,7 @@ async function seedDatabase() {
     parent_goal: objectiveAgreementGoal._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
-    related_to: OA_marketing_peter_and_johanna
+    related_to: OA_marketing_peter_and_johanna._id
   });
 
   const objectiveAgreementGoal1 = await factory.create('goal', {
@@ -144,7 +152,7 @@ async function seedDatabase() {
     assignee: peter._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
-    related_to: OA_marketing_hubert_and_peter
+    related_to: OA_marketing_hubert_and_peter._id
   });
 
   const teamGoal = await factory.create('goal', {
