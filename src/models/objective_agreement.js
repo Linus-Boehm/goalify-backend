@@ -4,7 +4,7 @@ import uuid from "uuid";
 
 const ObjectiveAgreementSchema = new Schema({
   _id: { type: String, default: uuid.v4 },
-  start_date: { type: Date, required: true },
+  start_date: { type: Date },
   end_date: { type: Date },
   description: { type: String },
 

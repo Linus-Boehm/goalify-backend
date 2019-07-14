@@ -9,10 +9,7 @@ export async function listMy(req, res) {
   console.log(userId);
 
   let agreements = await ObjectiveAgreementModel.find({
-    $or: [
-      { assignee: userId },
-      { reviewer: userId }
-    ]
+    $or: [{ assignee: userId }, { reviewer: userId }]
   }).exec();
 
   res.status(200).json(agreements);
@@ -21,7 +18,9 @@ export async function listMy(req, res) {
 export async function show(req, res) {
   const userId = req.access_token.id;
 
-  const agreement = await ObjectiveAgreementModel.findById(req.params.id).exec();
+  const agreement = await ObjectiveAgreementModel.findById(
+    req.params.id
+  ).exec();
   if (!agreement)
     return res.status(404).json({
       message: `Objective Agreement not found`
@@ -36,12 +35,11 @@ export async function show(req, res) {
 }
 
 export async function create(req, res) {
-
   const agreement = await ObjectiveAgreementModel.create({
     ...req.body,
-    organization_id: req.access_token.organization_id
-  }).exec();
-
+    organization: req.access_token.organization_id
+  });
+  console.log(agreement);
   res.status(200).json(agreement);
 }
 
@@ -61,9 +59,10 @@ export async function update(req, res) {
   res.status(200).json(agreement);
 }
 
-
 export async function remove(req, res) {
-  const agreement = await ObjectiveAgreementModel.findById(req.params.id).exec();
+  const agreement = await ObjectiveAgreementModel.findById(
+    req.params.id
+  ).exec();
   if (!agreement)
     return res.status(404).json({
       message: `Objective Agreement not found`
@@ -74,6 +73,6 @@ export async function remove(req, res) {
       message: `Unauthorized - Not access to Objective Agreement`
     });
 
-  ObjectiveAgreementModel.deleteOne({ _id: agreement._id })
+  ObjectiveAgreementModel.deleteOne({ _id: agreement._id });
   res.status(200).json(agreement);
 }
