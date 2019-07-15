@@ -14,7 +14,7 @@ export async function listMy(req, res) {
 
     agreements = agreements.map(a => {
         return {
-            ...a,
+            ...a._doc,
             bonus: parseFloat(a.bonus),
             max_bonus: parseFloat(a.max_bonus)
         }
@@ -40,7 +40,7 @@ export async function show(req, res) {
             message: `Unauthorized - Not access to Objective Agreement`
         });
     agreement = {
-        ...agreement,
+        ...agreement._doc,
         bonus: parseFloat(agreement.bonus),
         max_bonus: parseFloat(agreement.max_bonus)
     }
@@ -55,7 +55,7 @@ export async function create(req, res) {
     });
     console.log(agreement);
     agreement = {
-        ...agreement,
+        ...agreement._doc,
         bonus: parseFloat(agreement.bonus),
         max_bonus: parseFloat(agreement.max_bonus)
     }
@@ -76,7 +76,7 @@ export async function update(req, res) {
         }
     ).exec();
     agreement = {
-        ...agreement,
+        ...agreement._doc,
         bonus: parseFloat(agreement.bonus),
         max_bonus: parseFloat(agreement.max_bonus)
     }
@@ -99,7 +99,7 @@ export async function remove(req, res) {
 
     ObjectiveAgreementModel.deleteOne({_id: agreement._id});
     agreement = {
-        ...agreement,
+        ...agreement._doc,
         bonus: parseFloat(agreement.bonus),
         max_bonus: parseFloat(agreement.max_bonus)
     }
