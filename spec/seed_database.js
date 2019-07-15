@@ -26,8 +26,8 @@ async function seedDatabase() {
   // <Users>
   //OrganizationAdmin
   const johanna = await factory.create('user', {
-    firstname: 'johanna',
-    lastname: 'greedy',
+    firstname: 'Johanna',
+    lastname: 'Greedy',
     email: 'johanna@orga.com',
     password: '12345678',
     organization_id: organizaton._id,
@@ -35,16 +35,16 @@ async function seedDatabase() {
   });
 
   const peter = await factory.create('user', {
-    firstname: 'peter',
-    lastname: 'lustig',
+    firstname: 'Peter',
+    lastname: 'Lustig',
     email: 'peter@orga.com',
     password: '12345678',
     organization_id: organizaton._id
   });
 
   const hubert = await factory.create('user', {
-    firstname: 'hubert',
-    lastname: 'anderson',
+    firstname: 'Hubert',
+    lastname: 'Anderson',
     email: 'hubert@orga.com',
     password: '12345678',
     organization_id: organizaton._id
