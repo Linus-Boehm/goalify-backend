@@ -8,4 +8,5 @@ export default function (factory) {
     created_by: factory.assoc('user', '_id')
   });
 
+
 }

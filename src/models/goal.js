@@ -27,7 +27,7 @@ const GoalSchema = new Schema({
   is_private: { type: Boolean },
   progress: [ ProgressSchema ],
   progress_type: { type: String }, // enum GOAL_TYPE
-  maximum_progress: { type: Number },
+  maximum_progress: { type: String },
   oa_weight: { type: Number },
 
   // refs

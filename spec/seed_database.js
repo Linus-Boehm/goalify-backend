@@ -132,6 +132,25 @@ async function seedDatabase() {
     assignee: peter._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
+    maximum_progress: 25,
+    progress_type: GOAL_TYPE.COUNT,
+    progress: [
+      {
+        date: new Date(2019, 7, 13),
+        is_reviewed: true,
+        value: 6
+      },
+      {
+        date: new Date(2019, 7, 14),
+        is_reviewed: true,
+        value: 5
+      },
+      {
+        date: new Date(2019, 7, 15),
+        is_reviewed: false,
+        value: 8
+      }
+    ],
     related_to: OA_marketing_peter_and_johanna._id
   });
 
@@ -143,7 +162,11 @@ async function seedDatabase() {
     parent_goal: objectiveAgreementGoal._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
-    related_to: OA_marketing_peter_and_johanna._id
+    related_to: OA_marketing_peter_and_johanna._id,
+    progress_type: GOAL_TYPE.BOOLEAN,
+    progress: [
+
+    ]
   });
 
   const objectiveAgreementSubGoal1 = await factory.create('goal', {
@@ -163,6 +186,24 @@ async function seedDatabase() {
     assignee: peter._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
+    progress_type: GOAL_TYPE.QUALITATIVE,
+    progress: [
+      {
+        date: new Date(2019, 7, 13),
+        is_reviewed: true,
+        value: 2
+      },
+      {
+        date: new Date(2019, 7, 14),
+        is_reviewed: true,
+        value: 3
+      },
+      {
+        date: new Date(2019, 7, 15),
+        is_reviewed: false,
+        value: 4
+      }
+    ],
     related_to: OA_marketing_hubert_and_peter._id
   });
 
