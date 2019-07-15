@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import * as config from '../src/config';
 import factory from './factories';
+import {GOAL_TYPE} from "../src/models/goal";
 
 //Connect to the MongoDB database
 mongoose
@@ -104,6 +105,16 @@ async function seedDatabase() {
     created_by: peter._id,
     assignee: peter._id,
     organization_id: organizaton._id
+  });
+
+  const privateGoalJohanna = await factory.create('goal', {
+    title: 'Increase amount of selled contracts',
+    is_private: true,
+    created_by: johanna._id,
+    assignee: johanna._id,
+    organization_id: organizaton._id,
+    progress_type: GOAL_TYPE.COUNT,
+    progress: [{date: new Date(2019,7,10), value: 4},{date: new Date(2019,7,8), value: 7},{date: new Date(2019,7,7), value: 2}]
   });
 
   const privateSubGoal0 = await factory.create('goal', {
