@@ -2,77 +2,106 @@
 
 import ObjectiveAgreementModel from "../models/objective_agreement";
 import GoalModel from "../models/goal";
-import { assingeePopulateConfig } from "./goal";
+import {assingeePopulateConfig} from "./goal";
 
 export async function listMy(req, res) {
-  const userId = req.access_token.id;
-  console.log(userId);
+    const userId = req.access_token.id;
+    console.log(userId);
 
-  let agreements = await ObjectiveAgreementModel.find({
-    $or: [{ assignee: userId }, { reviewer: userId }]
-  }).exec();
+    let agreements = await ObjectiveAgreementModel.find({
+        $or: [{assignee: userId}, {reviewer: userId}]
+    }).exec();
 
-  res.status(200).json(agreements);
+    agreements = agreements.map(a => {
+        return {
+            ...a._doc,
+            bonus: parseFloat(a.bonus),
+            max_bonus: parseFloat(a.max_bonus)
+        }
+    });
+
+
+    res.status(200).json(agreements);
 }
 
 export async function show(req, res) {
-  const userId = req.access_token.id;
+    const userId = req.access_token.id;
 
-  const agreement = await ObjectiveAgreementModel.findById(
-    req.params.id
-  ).exec();
-  if (!agreement)
-    return res.status(404).json({
-      message: `Objective Agreement not found`
-    });
+    let agreement = await ObjectiveAgreementModel.findById(
+        req.params.id
+    ).exec();
+    if (!agreement)
+        return res.status(404).json({
+            message: `Objective Agreement not found`
+        });
 
-  if (agreement.assignee !== userId && agreement.reviewer !== userId)
-    return res.status(403).json({
-      message: `Unauthorized - Not access to Objective Agreement`
-    });
+    if (agreement.assignee !== userId && agreement.reviewer !== userId)
+        return res.status(403).json({
+            message: `Unauthorized - Not access to Objective Agreement`
+        });
+    agreement = {
+        ...agreement._doc,
+        bonus: parseFloat(agreement.bonus),
+        max_bonus: parseFloat(agreement.max_bonus)
+    }
 
-  res.status(200).json(agreement);
+    res.status(200).json(agreement);
 }
 
 export async function create(req, res) {
-  const agreement = await ObjectiveAgreementModel.create({
-    ...req.body,
-    organization: req.access_token.organization_id
-  });
-  console.log(agreement);
-  res.status(200).json(agreement);
+    let agreement = await ObjectiveAgreementModel.create({
+        ...req.body,
+        organization: req.access_token.organization_id
+    });
+    console.log(agreement);
+    agreement = {
+        ...agreement._doc,
+        bonus: parseFloat(agreement.bonus),
+        max_bonus: parseFloat(agreement.max_bonus)
+    }
+    res.status(200).json(agreement);
 }
 
 export async function update(req, res) {
-  const agreement = await ObjectiveAgreementModel.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      ...req.body,
-      organization_id: req.access_token.organization_id,
-      _id: req.params.id
-    },
-    {
-      new: true,
-      useFindAndModify: false
+    let agreement = await ObjectiveAgreementModel.findOneAndUpdate(
+        {_id: req.params.id},
+        {
+            ...req.body,
+            organization_id: req.access_token.organization_id,
+            _id: req.params.id
+        },
+        {
+            new: true,
+            useFindAndModify: false
+        }
+    ).exec();
+    agreement = {
+        ...agreement._doc,
+        bonus: parseFloat(agreement.bonus),
+        max_bonus: parseFloat(agreement.max_bonus)
     }
-  ).exec();
-  res.status(200).json(agreement);
+    res.status(200).json(agreement);
 }
 
 export async function remove(req, res) {
-  const agreement = await ObjectiveAgreementModel.findById(
-    req.params.id
-  ).exec();
-  if (!agreement)
-    return res.status(404).json({
-      message: `Objective Agreement not found`
-    });
+    let agreement = await ObjectiveAgreementModel.findById(
+        req.params.id
+    ).exec();
+    if (!agreement)
+        return res.status(404).json({
+            message: `Objective Agreement not found`
+        });
 
-  if (agreement.assignee !== userId && agreement.reviewer !== userId)
-    return res.status(403).json({
-      message: `Unauthorized - Not access to Objective Agreement`
-    });
+    if (agreement.assignee !== userId && agreement.reviewer !== userId)
+        return res.status(403).json({
+            message: `Unauthorized - Not access to Objective Agreement`
+        });
 
-  ObjectiveAgreementModel.deleteOne({ _id: agreement._id });
-  res.status(200).json(agreement);
+    ObjectiveAgreementModel.deleteOne({_id: agreement._id});
+    agreement = {
+        ...agreement._doc,
+        bonus: parseFloat(agreement.bonus),
+        max_bonus: parseFloat(agreement.max_bonus)
+    }
+    res.status(200).json(agreement);
 }

@@ -2,7 +2,7 @@
 import {Schema, model, Decimal128} from 'mongoose';
 import uuid from 'uuid'
 
-const GOAL_TYPE = {
+export const GOAL_TYPE = {
   QUALITATIVE: 'qualitative',
   COUNT: 'count',
   BOOLEAN: 'boolean'
@@ -13,7 +13,7 @@ const ProgressSchema = new Schema({
   _id: { type: String, default: uuid.v4 },
   date: { type: Date },
   is_reviewed: { type: Boolean },
-  value: {type: Decimal128}
+  value: {type: String}
 });
 
 const GoalSchema = new Schema({
