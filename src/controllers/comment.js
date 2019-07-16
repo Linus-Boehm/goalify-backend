@@ -17,8 +17,6 @@ export async function listComments(req, res) {
   const comments = await CommentModel.find({
     related_to
   }).exec();
-  console.log("HERE");
-  console.log(comments);
 
   res.status(200).json(comments);
 }
@@ -32,7 +30,7 @@ export async function create(req, res) {
   const comment = req.body.comment;
   comment.created_by = req.access_token.id;
   comment.date = new Date();
-  comment.related_to = req.body.goalId;
+  comment.related_to = req.body.related_to;
 
   try {
     let commentObj = await CommentModel.create(comment);

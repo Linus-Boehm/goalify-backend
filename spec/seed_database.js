@@ -114,7 +114,7 @@ async function seedDatabase() {
     assignee: johanna._id,
     organization_id: organizaton._id,
     progress_type: GOAL_TYPE.COUNT,
-    progress: [{date: new Date(2019,7,10), value: 4},{date: new Date(2019,7,8), value: 7},{date: new Date(2019,7,7), value: 2}]
+    progress: [{date: new Date(2019,7,10), value: 4},{is_reviewed: true,date: new Date(2019,7,8), value: 7},{date: new Date(2019,7,7), value: 2}]
   });
 
   const privateSubGoal0 = await factory.create('goal', {
