@@ -14,7 +14,6 @@ const ProgressSchema = new Schema({
     date: {type: Date},
     is_reviewed: {type: Boolean},
     value: {type: String},
-    comment_id: {type: String}
 });
 
 const GoalSchema = new Schema({
