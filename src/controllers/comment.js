@@ -33,9 +33,9 @@ export async function create(req, res) {
   comment.related_to = req.body.related_to;
 
   try {
-    let commentObj = await CommentModel.create(comment);
+    let resComment = await CommentModel.create(comment);
 
-    res.status(200).json({ comment: commentObj });
+    res.status(200).json(resComment);
   } catch (error) {
     if (error.code === 11000) {
       res.status(409).json({
