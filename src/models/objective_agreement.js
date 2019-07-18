@@ -1,6 +1,7 @@
 "use strict";
 import { Schema, model } from "mongoose";
 import uuid from "uuid";
+import bcrypt from "bcryptjs";
 
 const ObjectiveAgreementSchema = new Schema({
   _id: { type: String, default: uuid.v4 },
