@@ -7,7 +7,7 @@ import * as EmailService from '../services/email/email'
 import OrganizationModel from '../models/organization';
 import * as TokenService from '../services/auth/token'
 import jwt from 'jsonwebtoken';
-import { JwtSecret } from '../config';
+import {JwtSecret} from '../config';
 
 export async function login(req, res) {
     const errors = validationResult(req);
@@ -95,19 +95,23 @@ export function logout(req, res) {
 export async function confirm(req, res) {
     const token = req.body.token;
     console.log(token);
-    if(!token){
+    if (!token) {
         return res.status(401).json({
             error: 'No valid Token',
         })
     }
     try {
         let {id} = jwt.verify(token, JwtSecret, {sub: 'verify'})
-        const user = await UserModel.findOneAndUpdate({_id:id},{confirmed:true}).exec();
+        const user = await UserModel.findOneAndUpdate({_id: id}, {confirmed: true},
+            {
+                new: false,
+                useFindAndModify: false
+            }).exec();
         console.log(user)
-        if(!!user){
+        if (!!user) {
             return res.status(200).json({})
         }
-    }catch (e) {
+    } catch (e) {
 
     }
     return res.status(401).json({
