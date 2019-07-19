@@ -12,8 +12,11 @@ async function sendEmail(to, templateId, data) {
         from: 'no-reply@goalify.dev',
         templateId,
         dynamic_template_data: {...data},
+        tracking_settings:{
+            click_tracking: {enable:false,}
+        }
     };
-    console.log(msg)
+    //console.log(msg)
     await sgMail.send(msg)
 }
 

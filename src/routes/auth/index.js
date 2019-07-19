@@ -34,5 +34,6 @@ router.get('/logout', wrap(controller.logout));
 
 router.post('/login', loginValidators, wrap(controller.login));
 router.post('/register', registerValidators, wrap(controller.register));
+router.post('/confirm', wrap(controller.confirm));
 
 export default router
