@@ -21,7 +21,7 @@ router.put('/:id', wrap(controller.update));
 router.delete('/:id', wrap(controller.remove));
 
 
-router.put("/:id/member/", wrap(controller.updateMembers));
+router.put("/:id/member/", wrap(controller.addMember));
 
 router.delete("/:id/member/:userId", wrap(controller.removeMembers));
 

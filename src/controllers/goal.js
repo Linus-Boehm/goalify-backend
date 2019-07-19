@@ -3,7 +3,7 @@
 import TeamModel from '../models/team';
 import GoalModel from '../models/goal';
 import ObjectiveAgreementModel from '../models/objective_agreement';
-
+import * as EmailService from '../services/email/email'
 
 function genArchivedAtQuery(isArchived) {
   // $exists: existance of field is null, if field is null the field exists
@@ -13,7 +13,7 @@ function genArchivedAtQuery(isArchived) {
 
 export const assingeePopulateConfig = {
   path: "assignee",
-  select: "firstname lastname"
+  select: "firstname lastname email"
 };
 
 export async function show(req, res) {
@@ -198,6 +198,9 @@ export async function update(req, res) {
     return res.status(404).json({
       message: `Could not find goal with id ${id}`
     });
+  }
+  if(req.access_token.id !== goal.assignee && goal.reviewer){
+    EmailService.sendUpdateAgreementGoalEmail(goal, goal.assignee)
   }
 
   res.status(200).json(goal);
