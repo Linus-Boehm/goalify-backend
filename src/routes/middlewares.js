@@ -34,7 +34,7 @@ export function isAuthenticated(req, res, next) {
     // Remove Bearer from string
     let token = header.split(' ')[ 1 ]
     try{
-      req.access_token = jwt.verify(token, JwtSecret);
+      req.access_token = jwt.verify(token, JwtSecret, { sub: 'auth' });
       return next()
     }catch(e){
     }

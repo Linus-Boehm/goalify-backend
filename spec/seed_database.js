@@ -32,7 +32,8 @@ async function seedDatabase() {
     email: 'johanna@orga.com',
     password: '12345678',
     organization_id: organizaton._id,
-    role: 'organization_admin'
+    role: 'organization_admin',
+    confirmed: true
   });
 
   const peter = await factory.create('user', {
@@ -40,7 +41,8 @@ async function seedDatabase() {
     lastname: 'Lustig',
     email: 'peter@orga.com',
     password: '12345678',
-    organization_id: organizaton._id
+    organization_id: organizaton._id,
+    confirmed: true
   });
 
   const hubert = await factory.create('user', {
@@ -48,7 +50,8 @@ async function seedDatabase() {
     lastname: 'Anderson',
     email: 'hubert@orga.com',
     password: '12345678',
-    organization_id: organizaton._id
+    organization_id: organizaton._id,
+    confirmed: true
   });
 
   // </Users>

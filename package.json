@@ -14,6 +14,7 @@
     "seed": "babel-node spec/seed_database.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "async-middleware": "^1.2.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
