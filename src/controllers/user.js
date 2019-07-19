@@ -19,12 +19,13 @@ export async function organization(req, res) {
 
 export async function me(req, res) {
   let user = await UserModel.findById(req.access_token.id).exec();
-  let teams = await user.loadTeams()
+
   if (!user)
-    return res.status(404).json({
+    return res.status(403).json({
       error: "Not Found",
       message: `User not found`
     });
+  let teams = await user.loadTeams()
   let copy = { ...user._doc };
   delete copy.password;
 
