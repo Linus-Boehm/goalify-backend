@@ -14,7 +14,6 @@ export const MailTemplates = {
     forgotPassword: "d-722be799a310445a9195fd9c7824a0e2",
     OAGoalUpdate: "",
     inviteUser: "",
+    goalProgressUpdate: "d-24af0c77b5d841e9aaf06800077f6df5",
     inviteTeamMember: "d-682a9a2d348e4bdca0f119d48c8d61a7"
-
 };
-

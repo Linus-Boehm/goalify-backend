@@ -4,6 +4,7 @@ import TeamModel from '../models/team';
 import GoalModel from '../models/goal';
 import ObjectiveAgreementModel from '../models/objective_agreement';
 import * as EmailService from '../services/email/email'
+import {sendProgressToReviewGoalMail} from "../services/email/email";
 
 function genArchivedAtQuery(isArchived) {
   // $exists: existance of field is null, if field is null the field exists
@@ -199,6 +200,12 @@ export async function update(req, res) {
       message: `Could not find goal with id ${id}`
     });
   }
+
+  if(updatedData.notifyReviewer && goal.related_model === "ObjectiveAgreement") {
+    const agreement = await ObjectiveAgreementModel.findOne({ _id: goal.related_to });
+    sendProgressToReviewGoalMail(goal, agreement.reviewer);
+  }
+
   if(req.access_token.id !== goal.assignee && goal.reviewer){
     EmailService.sendUpdateAgreementGoalEmail(goal, goal.assignee)
   }
