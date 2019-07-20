@@ -30,7 +30,17 @@ export function sendVerifyEmail({id, firstname, lastname, email}) {
     const url = FrontendUrl + "/auth/confirm?token=" + token;
     return sendEmail(email, MailTemplates.verifySignUp, {firstname, lastname, verfiy_link: url})
 }
-export function sendUpdateAgreementGoalEmail(goal,user) {
+
+export async function sendProgressToReviewGoalMail(goal, user_id) {
+    const user = await UserModel.findOne({_id: user_id},).exec();
+    const url = FrontendUrl + "/app/goals/progress?id=" + goal._id;
+    const firstname = user.firstname;
+    const lastname = user.lastname;
+    const email = user.email;
+    return sendEmail(email, MailTemplates.goalProgressUpdate, {firstname, goal, lastname, url})
+}
+
+export function sendUpdateAgreementGoalEmail(goal, user) {
     //TODO
     //const token = TokenService.createVerfiyToken(id);
     //const url = FrontendUrl + "/auth/confirm?token=" + token;

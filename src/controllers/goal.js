@@ -4,6 +4,8 @@ import TeamModel from '../models/team';
 import GoalModel from '../models/goal';
 import ObjectiveAgreementModel from '../models/objective_agreement';
 import * as EmailService from '../services/email/email'
+import CommentModel from "../models/comment";
+import UserModel from "../models/user";
 
 function genArchivedAtQuery(isArchived) {
   // $exists: existance of field is null, if field is null the field exists
@@ -15,6 +17,25 @@ export const assingeePopulateConfig = {
   path: "assignee",
   select: "firstname lastname email"
 };
+
+
+async function createUserInitatedFeedItem(goalId, userId, text) {
+
+  const user = await UserModel.findOne({ _id: userId }).exec();
+
+  const comment = {
+    date: new Date(),
+    related_to: goalId,
+    related_model: 'Goal',
+    comment_type: 'feed_comment',
+    text: `${user.firstname} ${user.lastname} ${text}`
+  };
+
+  console.log(comment);
+
+
+  return await CommentModel.create(comment);
+}
 
 export async function show(req, res) {
   const userId = req.access_token.id;
@@ -163,8 +184,6 @@ export async function create(req, res) {
     });
   }
 
-  console.log(req.body);
-
   let goal = await GoalModel.create({
     title: "New Goal",
     ...req.body,
@@ -175,10 +194,13 @@ export async function create(req, res) {
 
   goal = await goal.populate(assingeePopulateConfig).execPopulate();
 
+  await createUserInitatedFeedItem(goal._id, userId, 'created the goal');
+
   res.status(200).json(goal);
 }
 
 export async function update(req, res) {
+  const userId = req.access_token.id;
   const { id } = req.params;
 
   const updatedData = req.body;
@@ -186,6 +208,8 @@ export async function update(req, res) {
   delete updatedData._id;
   delete updatedData.organization_id;
   delete updatedData.created_by;
+
+  let oldGoal = await GoalModel.findOne({ _id: id }).exec();
 
   let goal = await GoalModel.findOneAndUpdate({ _id: id }, updatedData, {
     new: true,
@@ -199,7 +223,21 @@ export async function update(req, res) {
       message: `Could not find goal with id ${id}`
     });
   }
-  if(req.access_token.id !== goal.assignee && goal.reviewer){
+
+  if (updatedData.notifyReviewer && goal.related_model === "ObjectiveAgreement") {
+    const agreement = await ObjectiveAgreementModel.findOne({ _id: goal.related_to });
+    EmailService.sendProgressToReviewGoalMail(goal, agreement.reviewer);
+  }
+
+  if (goal.title && oldGoal.title !== goal.title) {
+    createUserInitatedFeedItem(goal._id, userId, 'updated the title to "' + goal.title + '"');
+  } else if (goal.description && oldGoal.description !== goal.description) {
+    createUserInitatedFeedItem(goal._id, userId, 'updated the description');
+  } else if (goal.oa_weight && oldGoal.oa_weight !== goal.oa_weight) {
+    createUserInitatedFeedItem(goal._id, userId, 'updated the bonus weight to: ' + goal.oa_weight);
+  }
+
+  if (req.access_token.id !== goal.assignee && goal.reviewer) {
     EmailService.sendUpdateAgreementGoalEmail(goal, goal.assignee)
   }
 

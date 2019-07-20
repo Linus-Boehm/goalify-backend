@@ -18,7 +18,6 @@ const ObjectiveAgreementSchema = new Schema({
   assignee: { type: String, ref: "User" },
   reviewer: { type: String, ref: "User" },
 
-  team: { type: String, ref: "Team" },
   organization: { type: String, required: true, ref: "Organization" }
 });
 
