@@ -235,10 +235,6 @@ export async function update(req, res) {
     createUserInitatedFeedItem(goal._id, userId, 'updated the description');
   } else if (goal.oa_weight && oldGoal.oa_weight !== goal.oa_weight) {
     createUserInitatedFeedItem(goal._id, userId, 'updated the bonus weight to: ' + goal.oa_weight);
-  } else if (goal.start_date && oldGoal.start_date !== goal.start_date) {
-    createUserInitatedFeedItem(goal._id, userId, 'updated the start date');
-  } else if (goal.end_date && oldGoal.end_date !== goal.end_date) {
-    createUserInitatedFeedItem(goal._id, userId, 'updated the end date');
   }
 
   if (req.access_token.id !== goal.assignee && goal.reviewer) {
