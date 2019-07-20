@@ -17,7 +17,7 @@ const CommentSchema = new Schema({
     type: String,
     required: true
   },
-  comment_type : {
+  comment_type: {
     default: COMMENT_TYPE.COMMENT,
     type: String
   },
@@ -25,7 +25,7 @@ const CommentSchema = new Schema({
 
   //refs
 
-  created_by: { type: String, ref: "User", required: true },
+  created_by: { type: String, ref: "User" },
 
   related_to: { type: String, refPath: "related_model", required: true },
 
