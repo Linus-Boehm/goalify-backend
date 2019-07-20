@@ -223,13 +223,17 @@ export async function update(req, res) {
       message: `Could not find goal with id ${id}`
     });
   }
-
+  
   if (goal.title && oldGoal.title !== goal.title) {
     createUserInitatedFeedItem(goal._id, userId, 'updated the title to "' + goal.title + '"');
   } else if (goal.description && oldGoal.description !== goal.description) {
     createUserInitatedFeedItem(goal._id, userId, 'updated the description');
   } else if (goal.oa_weight && oldGoal.oa_weight !== goal.oa_weight) {
     createUserInitatedFeedItem(goal._id, userId, 'updated the bonus weight to: ' + goal.oa_weight);
+  } else if (goal.start_date && oldGoal.start_date !== goal.start_date) {
+    createUserInitatedFeedItem(goal._id, userId, 'updated the start date');
+  } else if (goal.end_date && oldGoal.end_date !== goal.end_date) {
+    createUserInitatedFeedItem(goal._id, userId, 'updated the end date');
   }
 
 

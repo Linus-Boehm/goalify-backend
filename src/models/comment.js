@@ -17,19 +17,19 @@ const CommentSchema = new Schema({
     type: String,
     required: true
   },
+
   comment_type: {
     default: COMMENT_TYPE.COMMENT,
     type: String
   },
+
   date: { type: Date, required: true },
 
   //refs
 
   created_by: { type: String, ref: "User" },
 
-  related_to: { type: String, refPath: "related_model", required: true },
-
-  related_model: { type: String }
+  related_to: { type: String, refPath: "related_model", required: true }
 });
 
 CommentSchema.set("versionKey", false);
