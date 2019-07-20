@@ -4,6 +4,8 @@ import UserModel from "../models/user";
 import TeamModel from "../models/team";
 import OrganizationModel from "../models/organization";
 import { validationResult } from "express-validator/check";
+import {createResetToken} from "../services/auth/token";
+import {inviteUser} from "../services/email/email";
 
 export async function organization(req, res) {
   let orga = await OrganizationModel.findById(
@@ -85,13 +87,22 @@ export async function create(req, res) {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  const user = req.body;
+  let user = req.body;
+  user = {
+    ...user,
+    password: Math.random().toString(36).substr(2, 5),
+    confirmed: false,
+    organization_id: req.access_token.organization_id
+  };
+
+
 
   try {
     let userObj = await UserModel.create(user);
     // if user is registered without errors
     // create a token
-
+    let token = createResetToken(userObj._id, userObj.password);
+    inviteUser(token,userObj._doc,req.access_token.id);
     res.status(200).json({ user: userObj });
   } catch (error) {
     if (error.code === 11000) {

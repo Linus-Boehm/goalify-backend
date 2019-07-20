@@ -99,21 +99,24 @@ export async function requestResetPassword(req, res) {
     }
     return res.status(200).json({})
 }
+
 export async function resetPassword(req, res) {
     const {token,password} = req.body
     try {
         let {id, hash} = jwt.verify(token, JwtSecret, {sub: 'reset'})
-        const user = await UserModel.findById(id)
+        console.log("jwt valid")
+        const user = await UserModel.findById(id).exec()
         const subPass = user.password.substring(0,8)
         const isPasswordValid = await bcrypt.compareSync(subPass, hash);
         if(isPasswordValid){
-            user.password = password
+            user.password = password;
+            user.confirmed = true;
             user.save();
             return res.status(200).json({})
         }
 
     }catch (e) {
-
+        console.error(e)
     }
     return res.status(401).json({})
 }
