@@ -223,7 +223,12 @@ export async function update(req, res) {
       message: `Could not find goal with id ${id}`
     });
   }
-  
+
+  if (updatedData.notifyReviewer && goal.related_model === "ObjectiveAgreement") {
+    const agreement = await ObjectiveAgreementModel.findOne({ _id: goal.related_to });
+    EmailService.sendProgressToReviewGoalMail(goal, agreement.reviewer);
+  }
+
   if (goal.title && oldGoal.title !== goal.title) {
     createUserInitatedFeedItem(goal._id, userId, 'updated the title to "' + goal.title + '"');
   } else if (goal.description && oldGoal.description !== goal.description) {
@@ -235,7 +240,6 @@ export async function update(req, res) {
   } else if (goal.end_date && oldGoal.end_date !== goal.end_date) {
     createUserInitatedFeedItem(goal._id, userId, 'updated the end date');
   }
-
 
   if (req.access_token.id !== goal.assignee && goal.reviewer) {
     EmailService.sendUpdateAgreementGoalEmail(goal, goal.assignee)
