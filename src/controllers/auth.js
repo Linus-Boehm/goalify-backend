@@ -8,6 +8,7 @@ import OrganizationModel from '../models/organization';
 import * as TokenService from '../services/auth/token'
 import jwt from 'jsonwebtoken';
 import {JwtSecret} from '../config';
+import bcrypt from "bcryptjs";
 
 export async function login(req, res) {
     const errors = validationResult(req);
@@ -86,6 +87,33 @@ export async function register(req, res) {
             throw error
         }
     }
+}
+export async function requestResetPassword(req, res) {
+    const {email} = req.body;
+    const user = await UserModel.findOne({email});
+    if(user) {
+        let token = TokenService.createResetToken(user._id, user.password)
+        EmailService.sendResetPasswordEmail(token, user);
+    }
+    return res.status(200).json({})
+}
+export async function resetPassword(req, res) {
+    const {token,password} = req.body
+    try {
+        let {id, hash} = jwt.verify(token, JwtSecret, {sub: 'reset'})
+        const user = await UserModel.findById(id)
+        const subPass = user.password.substring(0,8)
+        const isPasswordValid = await bcrypt.compareSync(subPass, hash);
+        if(isPasswordValid){
+            user.password = password
+            user.save();
+            return res.status(200).json({})
+        }
+
+    }catch (e) {
+
+    }
+    return res.status(401).json({})
 }
 
 export function logout(req, res) {

@@ -31,6 +31,7 @@ const loginValidators = [
 const router = Router();
 
 router.get('/logout', wrap(controller.logout));
+router.post('/forgotpassword', wrap(controller.requestResetPassword));
 
 router.post('/login', loginValidators, wrap(controller.login));
 router.post('/register', registerValidators, wrap(controller.register));
