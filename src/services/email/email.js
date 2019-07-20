@@ -37,13 +37,19 @@ export function sendUpdateAgreementGoalEmail(goal,user) {
     //return sendEmail(email, MailTemplates.verifySignUp, {firstname, lastname, verfiy_link: url})
 
 }
+
+export function sendResetPasswordEmail(token, {firstname, lastname, email}) {
+    const url = FrontendUrl + "/auth/reset?token=" + token;
+    return sendEmail(email, MailTemplates.forgotPassword, {firstname, lastname,url})
+}
+
 export async function addTeamMember(team,user_id,manager_id) {
     if(user_id === manager_id){
         return
     }
     let users = await UserModel.find({_id: {$in:[user_id,manager_id]}},).exec()
     let userObjs = keyBy(users,'id');
-    const team_url = FrontendUrl +"/teams?id="+team._id
+    const team_url = FrontendUrl +"/app/teams?id="+team._id
     return sendEmail(userObjs[user_id].email, MailTemplates.inviteTeamMember, {user:userObjs[user_id],manager:userObjs[manager_id],team:team.name, team_url})
 
 
