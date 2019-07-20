@@ -90,6 +90,8 @@ export async function register(req, res) {
 }
 export async function requestResetPassword(req, res) {
     const {email} = req.body;
+    if (!email)
+        return res.status(422).json({})
     const user = await UserModel.findOne({email});
     if(user) {
         let token = TokenService.createResetToken(user._id, user.password)
