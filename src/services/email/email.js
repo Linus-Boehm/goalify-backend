@@ -57,10 +57,16 @@ export async function addTeamMember(team,user_id,manager_id) {
     if(user_id === manager_id){
         return
     }
-    let users = await UserModel.find({_id: {$in:[user_id,manager_id]}},).exec()
+    let users = await UserModel.find({_id: {$in:[user_id,manager_id]}}, "firstname lastname email").exec()
     let userObjs = keyBy(users,'id');
     const team_url = FrontendUrl +"/app/teams?id="+team._id
+
     return sendEmail(userObjs[user_id].email, MailTemplates.inviteTeamMember, {user:userObjs[user_id],manager:userObjs[manager_id],team:team.name, team_url})
+}
 
+export async function inviteUser(token, {email,firstname,lastname}, manager_id) {
+    const url = FrontendUrl + "/auth/reset?token=" + token;
+    let manager = await UserModel.findById(manager_id,"firstname lastname").exec()
 
+    return sendEmail(email, MailTemplates.inviteUser, {user:{firstname,lastname},manager, url})
 }

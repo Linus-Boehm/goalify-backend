@@ -13,7 +13,9 @@ export const MailTemplates = {
     verifySignUp: "d-0bf037942fd1496a9f393eb2a96fa9a6",
     forgotPassword: "d-722be799a310445a9195fd9c7824a0e2",
     OAGoalUpdate: "",
-    inviteUser: "",
     goalProgressUpdate: "d-24af0c77b5d841e9aaf06800077f6df5",
+    inviteUser: "d-bd02f17d2c0b4812b90926b7070707ff",
     inviteTeamMember: "d-682a9a2d348e4bdca0f119d48c8d61a7"
+
 };
+
