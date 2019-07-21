@@ -11,7 +11,8 @@
     "start": "echo \"TODO: build with babel\" && exit 1",
     "dev": "nodemon --exec babel-node src/index.js",
     "babel": "babel-node src/index.js",
-    "seed": "babel-node spec/seed_database.js"
+    "seed": "babel-node spec/seed_database.js",
+    "seed-demo": "babel-node spec/seed_database_demo.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import * as config from '../src/config';
 import factory from './factories';
-import {GOAL_TYPE} from "../src/models/goal";
+import { GOAL_TYPE } from "../src/models/goal";
 
 //Connect to the MongoDB database
 mongoose
@@ -21,7 +21,7 @@ async function seedDatabase() {
   console.log('Seed Database... ');
   mongoose.connection.db.dropDatabase();
 
-  const organizaton = await factory.create('organization', { name: 'Orga' });
+  const organizaton = await factory.create('organization', { name: 'Unicorn startup' });
 
   // ---
   // <Users>
@@ -29,7 +29,7 @@ async function seedDatabase() {
   const johanna = await factory.create('user', {
     firstname: 'Johanna',
     lastname: 'Greedy',
-    email: 'johanna@orga.com',
+    email: 'johanna@unicorn.com',
     password: '12345678',
     organization_id: organizaton._id,
     role: 'organization_admin',
@@ -39,16 +39,25 @@ async function seedDatabase() {
   const peter = await factory.create('user', {
     firstname: 'Peter',
     lastname: 'Lustig',
-    email: 'peter@orga.com',
+    email: 'peter@unicorn.com',
     password: '12345678',
     organization_id: organizaton._id,
     confirmed: true
   });
 
-  const hubert = await factory.create('user', {
-    firstname: 'Hubert',
+  const thomas = await factory.create('user', {
+    firstname: 'Thomas A.',
     lastname: 'Anderson',
-    email: 'hubert@orga.com',
+    email: 'thomas@unicorn.com',
+    password: '12345678',
+    organization_id: organizaton._id,
+    confirmed: true
+  });
+
+  const georg = await factory.create('user', {
+    firstname: 'Georg',
+    lastname: 'Porter',
+    email: 'georg@unicorn.com',
     password: '12345678',
     organization_id: organizaton._id,
     confirmed: true
@@ -58,26 +67,29 @@ async function seedDatabase() {
   // ---
   // <Teams>
 
-  const marketingTeam = await factory.create('team', {
-    name: 'Marketing',
-    organization_id: organizaton._id,
-  });
-  await marketingTeam.addUser({ user_id: peter._id, role: 'member' }); // test overwrite
-  await marketingTeam.addUser({ user_id: peter._id, role: 'leader' });
-  await marketingTeam.addUser({ user_id: johanna._id, role: 'member' });
 
   const salesTeam = await factory.create('team', {
     name: 'Sales',
     organization_id: organizaton._id,
   });
-  await salesTeam.addUser({ user_id: hubert._id, role: 'leader' });
+  await salesTeam.addUser({ user_id: johanna._id, role: 'leader' });
   await salesTeam.addUser({ user_id: peter._id, role: 'member' });
+  await salesTeam.addUser({ user_id: thomas._id, role: 'member' });
+
+  const marketingTeam = await factory.create('team', {
+    name: 'Marketing',
+    organization_id: organizaton._id,
+  });
+
+  await marketingTeam.addUser({ user_id: georg._id, role: 'leader' });
+  await marketingTeam.addUser({ user_id: peter._id, role: 'member' });
+
 
   // </Teams>
   // ---
   // <Agreements>
 
-  const OA_marketing_peter_and_johanna = await factory.create('agreement', {
+  const OA_marketing_johanna_and_peter = await factory.create('agreement', {
     reviewer: johanna._id,
     assignee: peter._id,
     team: marketingTeam._id,
@@ -87,54 +99,14 @@ async function seedDatabase() {
     end_date: new Date(2019, 7, 1)
   });
 
-  const OA_marketing_hubert_and_peter = await factory.create('agreement', {
-    reviewer: hubert._id,
-    assignee: peter._id,
-    team: salesTeam._id,
-    organizaton: organizaton._id,
-
-    start_date: new Date(2019, 1, 1),
-    end_date: new Date(2019, 12, 31)
-  });
-
 
   // </Agreements>
   // ---
   // <Goals>
 
-  const privateGoal = await factory.create('goal', {
-    title: 'Decrease stress level',
-    is_private: true,
-    created_by: peter._id,
-    assignee: peter._id,
-    reviewer: peter._id,
-    organization_id: organizaton._id
-  });
-
-  const privateGoalJohanna = await factory.create('goal', {
-    title: 'Increase amount of selled contracts',
-    is_private: true,
-    created_by: johanna._id,
-    assignee: johanna._id,
-    reviewer: peter._id,
-    organization_id: organizaton._id,
-    progress_type: GOAL_TYPE.COUNT,
-    progress: [{date: new Date(2019,7,10), value: 4},{is_reviewed: true,date: new Date(2019,7,8), value: 7},{date: new Date(2019,7,7), value: 2}]
-  });
-
-  const privateSubGoal0 = await factory.create('goal', {
-    title: 'Meditate for 10 minutes every day',
-    is_private: true,
-    created_by: peter._id,
-    assignee: peter._id,
-    reviewer: peter._id,
-    parent_goal: privateGoal._id,
-    organization_id: organizaton._id
-  });
-
   const objectiveAgreementGoal = await factory.create('goal', {
     title: 'Convert 25 salesforce Leads',
-    created_by: peter._id,
+    created_by: johanna._id,
     assignee: peter._id,
     reviewer: johanna._id,
     organization_id: organizaton._id,
@@ -158,7 +130,7 @@ async function seedDatabase() {
         value: 8
       }
     ],
-    related_to: OA_marketing_peter_and_johanna._id
+    related_to: OA_marketing_johanna_and_peter._id
   });
 
   const objectiveAgreementSubGoal0 = await factory.create('goal', {
@@ -169,10 +141,9 @@ async function seedDatabase() {
     parent_goal: objectiveAgreementGoal._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
-    related_to: OA_marketing_peter_and_johanna._id,
+    related_to: OA_marketing_johanna_and_peter._id,
     progress_type: GOAL_TYPE.BOOLEAN,
-    progress: [
-    ]
+    progress: []
   });
 
   const objectiveAgreementSubGoal1 = await factory.create('goal', {
@@ -183,35 +154,7 @@ async function seedDatabase() {
     parent_goal: objectiveAgreementGoal._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
-    related_to: OA_marketing_peter_and_johanna._id
-  });
-
-  const objectiveAgreementGoal1 = await factory.create('goal', {
-    title: 'Improve Sales',
-    created_by: hubert._id,
-    assignee: peter._id,
-    reviewer: hubert._id,
-    organization_id: organizaton._id,
-    related_model: 'ObjectiveAgreement',
-    progress_type: GOAL_TYPE.QUALITATIVE,
-    progress: [
-      {
-        date: new Date(2019, 7, 13),
-        is_reviewed: true,
-        value: 2
-      },
-      {
-        date: new Date(2019, 7, 14),
-        is_reviewed: true,
-        value: 3
-      },
-      {
-        date: new Date(2019, 7, 15),
-        is_reviewed: false,
-        value: 4
-      }
-    ],
-    related_to: OA_marketing_hubert_and_peter._id
+    related_to: OA_marketing_johanna_and_peter._id
   });
 
   const teamGoal = await factory.create('goal', {
@@ -224,7 +167,7 @@ async function seedDatabase() {
 
   const organizationGoal = await factory.create('goal', {
     title: 'Increase revenue by 20%',
-    created_by: hubert._id,
+    created_by: thomas._id,
     related_to: organizaton._id,
     related_model: 'Organization',
     organization_id: organizaton._id
