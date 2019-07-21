@@ -29,5 +29,7 @@ cd path/to/workspace/goalify-backend
 * Use `yarn seed` to seed the database
 * Modify /spec/seed_database.js and /spec/factories/* if needed
 
-
+## Email setup
+* We use Sendgrid for Email Notifications
+* Please create a free account on sendgrid, and use the templates provided in `email_templates` 
  
