@@ -26,7 +26,11 @@ cd path/to/workspace/goalify-backend
 * Visit http://localhost:3000/
 
 ## Seed database
-* Use yarn seed to seed the database
+* Use `yarn seed` to seed the database
 * Modify /spec/seed_database.js and /spec/factories/* if needed
 
+##Run in production
+* Use `yarn seed` to seed the database
+* Use `yarn build` to build for production
+* Use `yarn start` to run the production build
  
