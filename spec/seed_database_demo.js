@@ -46,7 +46,7 @@ async function seedDatabase() {
   });
 
   const thomas = await factory.create('user', {
-    firstname: 'Thomas A.',
+    firstname: 'Thomas',
     lastname: 'Anderson',
     email: 'thomas@unicorn.com',
     password: '12345678',
@@ -73,7 +73,7 @@ async function seedDatabase() {
     organization_id: organizaton._id,
   });
   await salesTeam.addUser({ user_id: johanna._id, role: 'leader' });
-  await salesTeam.addUser({ user_id: peter._id, role: 'member' });
+  // await salesTeam.addUser({ user_id: peter._id, role: 'member' });
   await salesTeam.addUser({ user_id: thomas._id, role: 'member' });
 
   const marketingTeam = await factory.create('team', {
@@ -82,16 +82,16 @@ async function seedDatabase() {
   });
 
   await marketingTeam.addUser({ user_id: georg._id, role: 'leader' });
-  await marketingTeam.addUser({ user_id: peter._id, role: 'member' });
+  // await marketingTeam.addUser({ user_id: peter._id, role: 'member' });
 
 
   // </Teams>
   // ---
   // <Agreements>
 
-  const OA_marketing_johanna_and_peter = await factory.create('agreement', {
+  const OA_marketing_johanna_and_thomas = await factory.create('agreement', {
     reviewer: johanna._id,
-    assignee: peter._id,
+    assignee: thomas._id,
     team: marketingTeam._id,
     organizaton: organizaton._id,
 
@@ -107,7 +107,7 @@ async function seedDatabase() {
   const objectiveAgreementGoal = await factory.create('goal', {
     title: 'Convert 25 salesforce Leads',
     created_by: johanna._id,
-    assignee: peter._id,
+    assignee: thomas._id,
     reviewer: johanna._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
@@ -130,18 +130,18 @@ async function seedDatabase() {
         value: 8
       }
     ],
-    related_to: OA_marketing_johanna_and_peter._id
+    related_to: OA_marketing_johanna_and_thomas._id
   });
 
   const objectiveAgreementSubGoal0 = await factory.create('goal', {
     title: 'Prioritize existing salesforce Leads',
     is_private: true,
-    created_by: peter._id,
-    assignee: peter._id,
+    created_by: johanna._id,
+    assignee: thomas._id,
     parent_goal: objectiveAgreementGoal._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
-    related_to: OA_marketing_johanna_and_peter._id,
+    related_to: OA_marketing_johanna_and_thomas._id,
     progress_type: GOAL_TYPE.BOOLEAN,
     progress: []
   });
@@ -149,12 +149,12 @@ async function seedDatabase() {
   const objectiveAgreementSubGoal1 = await factory.create('goal', {
     title: 'Call 2 salesforce Leads per Day',
     is_private: true,
-    created_by: peter._id,
-    assignee: peter._id,
+    created_by: johanna._id,
+    assignee: thomas._id,
     parent_goal: objectiveAgreementGoal._id,
     organization_id: organizaton._id,
     related_model: 'ObjectiveAgreement',
-    related_to: OA_marketing_johanna_and_peter._id
+    related_to: OA_marketing_johanna_and_thomas._id
   });
 
   const teamGoal = await factory.create('goal', {
@@ -167,7 +167,7 @@ async function seedDatabase() {
 
   const organizationGoal = await factory.create('goal', {
     title: 'Increase revenue by 20%',
-    created_by: thomas._id,
+    created_by: georg._id,
     related_to: organizaton._id,
     related_model: 'Organization',
     organization_id: organizaton._id
