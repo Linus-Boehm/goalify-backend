@@ -224,9 +224,17 @@ export async function update(req, res) {
     });
   }
 
-  if (updatedData.notifyReviewer && goal.related_model === "ObjectiveAgreement") {
+  if (updatedData.added_progress && goal.related_model === "ObjectiveAgreement") {
     const agreement = await ObjectiveAgreementModel.findOne({ _id: goal.related_to });
     EmailService.sendProgressToReviewGoalMail(goal, agreement.reviewer);
+  }
+
+  if(updatedData.added_progress || updatedData.added_progress_reviewed) {
+    createUserInitatedFeedItem(goal._id, userId, 'tracked progress on "' + goal.title + '"');
+  } else if(updatedData.updated_progress) {
+    createUserInitatedFeedItem(goal._id, userId, 'updated progress on "' + goal.title + '"');
+  } else if(updatedData.reviewed_progress) {
+    createUserInitatedFeedItem(goal._id, userId, 'reviewed progress on "' + goal.title + '"');
   }
 
   if (goal.title && oldGoal.title !== goal.title) {
