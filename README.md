@@ -1,4 +1,4 @@
-#Goalify Backend API
+# Goalify Backend API
 
 A Backend REST-API for the Goalify App
 
